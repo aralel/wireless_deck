@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wi-Fi Radar</title>
+  <meta name="description" content="Wi-Fi Radar is a macOS wireless utility for scanning nearby Wi-Fi networks, sweeping Bluetooth Low Energy devices, and exporting local diagnostics from one dashboard.">
+  <link rel="icon" href="assets/app-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html">
+        <img src="assets/app-icon.png" alt="Wi-Fi Radar icon" class="brand-icon">
+        <span>Wi-Fi Radar</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Overview</a>
+        <a href="support.html">Support</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="app-store.html">App Store Q&amp;A</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">macOS Wireless Utility</p>
+          <h1>Inspect Wi-Fi and Bluetooth around your Mac.</h1>
+          <p class="hero-text">
+            Wi-Fi Radar combines nearby Wi-Fi scanning and Bluetooth Low Energy discovery in one Mac dashboard.
+            Compare signal quality, inspect identifiers and radio context, export visible results, and reopen to locally
+            cached data instead of a blank screen.
+          </p>
+
+          <div class="hero-actions">
+            <a class="button primary" href="support.html">Get Support</a>
+            <a class="button secondary" href="privacy.html">Read Privacy Policy</a>
+          </div>
+
+          <div class="tag-row" aria-label="Highlights">
+            <span class="tag">Nearby Wi-Fi scan</span>
+            <span class="tag">Bluetooth LE sweep</span>
+            <span class="tag">Signal quality</span>
+            <span class="tag">Cached restore</span>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="hero-card-top">
+            <span class="pill good">Wi-Fi + Bluetooth</span>
+            <span class="pill warm">Mac utility</span>
+          </div>
+
+          <div class="metric-grid">
+            <article class="metric-card">
+              <span class="metric-title">Wi-Fi radar</span>
+              <strong>SSID, BSSID, channel</strong>
+              <p>Inspect nearby access points, security details, router hints, and current join context.</p>
+            </article>
+
+            <article class="metric-card">
+              <span class="metric-title">Bluetooth radar</span>
+              <strong>BLE discovery</strong>
+              <p>See nearby advertising devices, service summaries, connectability hints, and signal strength.</p>
+            </article>
+
+            <article class="metric-card">
+              <span class="metric-title">Signal</span>
+              <strong>Bars, %, dBm</strong>
+              <p>Read raw and human-friendly wireless signal quality at the same time.</p>
+            </article>
+
+            <article class="metric-card">
+              <span class="metric-title">Field tools</span>
+              <strong>Copy + debug</strong>
+              <p>Export visible rows, inspect logs on demand, and restore the last local snapshot on launch.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-grid">
+        <article class="content-card">
+          <p class="eyebrow">What It Shows</p>
+          <h2>Built for practical wireless troubleshooting.</h2>
+          <ul class="feature-list">
+            <li>Nearby Wi-Fi SSIDs with sortable signal strength, band, channel, noise, and security</li>
+            <li>BSSID visibility when macOS grants location access</li>
+            <li>Nearby Bluetooth Low Energy devices with signal, services, manufacturer hints, and last-seen timing</li>
+            <li>Best-effort router and device identification from visible metadata</li>
+            <li>Copy visible rows and optional debug logs for diagnostics and support</li>
+          </ul>
+        </article>
+
+        <article class="content-card accent-card">
+          <p class="eyebrow">Permission Note</p>
+          <h2>Why Wi-Fi Radar asks for Location and Bluetooth access</h2>
+          <p>
+            On macOS, nearby Wi-Fi names and BSSIDs are gated behind Location Services,
+            and Bluetooth Low Energy discovery may prompt for Bluetooth access. Wi-Fi Radar
+            asks only for the permissions needed to reveal nearby wireless details inside the app.
+          </p>
+          <p>
+            The app is not a mapping app, does not build location histories, does not upload scan results,
+            and keeps recent snapshots local on your Mac.
+          </p>
+        </article>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Wi-Fi Deck for macOS</p>
+    </footer>
+  </div>
+</body>
+</html>

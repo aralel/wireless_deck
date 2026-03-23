@@ -1,0 +1,121 @@
+name: router monitor
+
+options:
+  createIntermediateGroups: true
+
+settings:
+  base:
+    CODE_SIGN_STYLE: Automatic
+    CURRENT_PROJECT_VERSION: 1
+    DEVELOPMENT_TEAM: QP23LM42KN
+    MARKETING_VERSION: 1.0
+    SWIFT_APPROACHABLE_CONCURRENCY: "YES"
+    SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY: "YES"
+    SWIFT_VERSION: 5.0
+
+targets:
+  "router monitor":
+    type: application
+    platform: macOS
+    deploymentTarget: "26.2"
+    sources:
+      - path: "router monitor"
+      - path: "Shared"
+    settings:
+      base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        COMBINE_HIDPI_IMAGES: "YES"
+        ENABLE_APP_SANDBOX: "NO"
+        ENABLE_HARDENED_RUNTIME: "YES"
+        ENABLE_PREVIEWS: "YES"
+        ENABLE_RESOURCE_ACCESS_LOCATION: "YES"
+        ENABLE_USER_SELECTED_FILES: readonly
+        GENERATE_INFOPLIST_FILE: "YES"
+        INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: "router monitor uses Bluetooth access to discover nearby Bluetooth Low Energy devices, show their names, signal strength, services, and related diagnostics."
+        INFOPLIST_KEY_NSHumanReadableCopyright: ""
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "router monitor uses your location permission so macOS will let it scan nearby Wi-Fi networks and show their SSIDs and BSSIDs."
+        PRODUCT_BUNDLE_IDENTIFIER: com.aralel.router-monitor
+        PRODUCT_NAME: "$(TARGET_NAME)"
+        REGISTER_APP_GROUPS: "YES"
+        STRING_CATALOG_GENERATE_SYMBOLS: "YES"
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+        SWIFT_EMIT_LOC_STRINGS: "YES"
+
+  "router monitorTests":
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "26.2"
+    sources:
+      - path: "router monitorTests"
+    dependencies:
+      - target: "router monitor"
+    settings:
+      base:
+        BUNDLE_LOADER: "$(TEST_HOST)"
+        GENERATE_INFOPLIST_FILE: "YES"
+        PRODUCT_BUNDLE_IDENTIFIER: com.aralel.router-monitorTests
+        PRODUCT_NAME: "$(TARGET_NAME)"
+        STRING_CATALOG_GENERATE_SYMBOLS: "NO"
+        SWIFT_EMIT_LOC_STRINGS: "NO"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/router monitor.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/router monitor"
+
+  "router monitorUITests":
+    type: bundle.ui-testing
+    platform: macOS
+    deploymentTarget: "26.2"
+    sources:
+      - path: "router monitorUITests"
+    dependencies:
+      - target: "router monitor"
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: "YES"
+        PRODUCT_BUNDLE_IDENTIFIER: com.aralel.router-monitorUITests
+        PRODUCT_NAME: "$(TARGET_NAME)"
+        STRING_CATALOG_GENERATE_SYMBOLS: "NO"
+        SWIFT_EMIT_LOC_STRINGS: "NO"
+        TEST_TARGET_NAME: "router monitor"
+
+  "router monitor iPhone":
+    type: application
+    platform: iOS
+    deploymentTarget: "26.2"
+    sources:
+      - path: "router monitor iPhone"
+      - path: "Shared"
+    settings:
+      base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_ENTITLEMENTS: "router monitor iPhone/router monitor iPhone.entitlements"
+        ENABLE_PREVIEWS: "YES"
+        GENERATE_INFOPLIST_FILE: "YES"
+        INFOPLIST_KEY_NSHumanReadableCopyright: ""
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "router monitor iPhone uses your location permission so iOS can reveal the Wi-Fi network this iPhone is currently connected to."
+        PRODUCT_BUNDLE_IDENTIFIER: com.aralel.router-monitor.iphone
+        PRODUCT_NAME: "$(TARGET_NAME)"
+        STRING_CATALOG_GENERATE_SYMBOLS: "YES"
+        SUPPORTS_MACCATALYST: "NO"
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+        SWIFT_EMIT_LOC_STRINGS: "YES"
+        TARGETED_DEVICE_FAMILY: 1
+
+schemes:
+  "router monitor":
+    build:
+      targets:
+        "router monitor": all
+    test:
+      targets:
+        - "router monitorTests"
+        - "router monitorUITests"
+    run:
+      config: Debug
+
+  "router monitor iPhone":
+    build:
+      targets:
+        "router monitor iPhone": all
+    run:
+      config: Debug

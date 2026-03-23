@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>App Store Notes | Wi-Fi Radar</title>
+  <meta name="description" content="App Store submission notes for the current macOS build of Wi-Fi Radar.">
+  <link rel="icon" href="assets/app-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html">
+        <img src="assets/app-icon.png" alt="Wi-Fi Radar icon" class="brand-icon">
+        <span>Wi-Fi Radar</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Overview</a>
+        <a href="support.html">Support</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="app-store.html" aria-current="page">App Store Q&amp;A</a>
+      </nav>
+    </header>
+
+    <main class="document-layout">
+      <section class="document-hero">
+        <p class="eyebrow">App Store</p>
+        <h1>App Store submission notes for the current macOS app.</h1>
+        <p>Updated: March 23, 2026</p>
+      </section>
+
+      <section class="notice-banner">
+        Replace the bracketed placeholders before you submit, and keep the support and privacy URLs pointed at your published GitHub Pages site.
+      </section>
+
+      <section class="section-grid">
+        <article class="document-card">
+          <p class="eyebrow">Metadata</p>
+          <h2>Current positioning</h2>
+          <ul class="document-list">
+            <li>App name: <code>Wi-Fi Radar</code></li>
+            <li>Subtitle: <code>Inspect Wi-Fi and Bluetooth</code></li>
+            <li>Bundle ID: <code>com.aralel.router-monitor</code></li>
+            <li>Version: <code>1.0</code></li>
+            <li>Category: <code>Utilities</code></li>
+          </ul>
+          <p>
+            The current submission copy is scoped to the macOS build. It covers the Wi-Fi radar, Bluetooth Low Energy radar,
+            cached local restore, copy tools, and the optional debug console.
+          </p>
+        </article>
+
+        <article class="document-card">
+          <p class="eyebrow">Review Notes</p>
+          <h2>What App Review should know</h2>
+          <ul class="document-list">
+            <li>The Wi-Fi radar uses CoreWLAN and requires Location Services so macOS will reveal nearby SSIDs and BSSIDs.</li>
+            <li>The Bluetooth radar discovers nearby Bluetooth Low Energy devices and may prompt for Bluetooth access.</li>
+            <li>Bluetooth results show devices that are actively advertising nearby.</li>
+            <li>The app does not require sign-in, does not upload results, and does not include analytics or advertising SDKs.</li>
+          </ul>
+        </article>
+      </section>
+
+      <article class="document-card">
+        <p class="eyebrow">Privacy</p>
+        <h2>Recommended privacy answers</h2>
+        <ul class="document-list">
+          <li>Data collected from the app: <code>No</code></li>
+          <li>Tracking: <code>No</code></li>
+          <li>Why location permission is requested: Wi-Fi scanning on macOS requires it for nearby SSIDs and BSSIDs.</li>
+          <li>Why Bluetooth permission is requested: the Bluetooth radar needs it to discover nearby BLE devices on Mac.</li>
+          <li>Why no data collected is accurate: scans, sweeps, logs, and cached snapshots stay on the Mac unless the user explicitly copies data to the pasteboard.</li>
+        </ul>
+      </article>
+
+      <article class="document-card">
+        <p class="eyebrow">Answer Sheet</p>
+        <h2>Use the markdown file when you need paste-ready answers.</h2>
+        <p>
+          The website page is for browsing. The markdown file is the quick copy source for App Store Connect fields and review notes.
+        </p>
+        <p><a class="text-link" href="AppStoreSubmissionAnswers.md">Open the markdown answer sheet</a></p>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <p>Wi-Fi Radar for macOS</p>
+      <p><a class="text-link" href="AppStoreSubmissionAnswers.md">Markdown answer sheet</a></p>
+    </footer>
+  </div>
+</body>
+</html>

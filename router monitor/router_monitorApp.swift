@@ -5,28 +5,44 @@
 //  Created by maysam torabi on 22.03.2026.
 //
 
+import AppKit
 import SwiftUI
-import SwiftData
 
 @main
 struct router_monitorApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+    @NSApplicationDelegateAdaptor private var appDelegate: RouterMonitorAppDelegate
 
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+    init() {
+        AppLog.info("app", "router monitor launched")
+        AppRuntimeDiagnostics.logLaunchDetails()
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(sharedModelContainer)
+    }
+}
+
+final class RouterMonitorAppDelegate: NSObject, NSApplicationDelegate {
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        configureApplicationIcon()
+    }
+
+    private func configureApplicationIcon() {
+        let namedImage = NSImage(named: NSImage.Name("AppIcon"))
+        let resourceImage = Bundle.main.image(forResource: NSImage.Name("AppIcon"))
+        let icnsImage = Bundle.main.url(forResource: "AppIcon", withExtension: "icns").flatMap(NSImage.init(contentsOf:))
+
+        guard let iconImage = namedImage ?? resourceImage ?? icnsImage else {
+            AppLog.warning("app", "Unable to load AppIcon from the main bundle for Dock icon")
+            return
+        }
+
+        NSApplication.shared.applicationIconImage = iconImage
+        AppLog.info(
+            "app",
+            "Application icon configured for Dock from bundle resource size=\(Int(iconImage.size.width))x\(Int(iconImage.size.height))"
+        )
     }
 }

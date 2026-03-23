@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Support | Wi-Fi Radar</title>
+  <meta name="description" content="Support page for Wi-Fi Radar, covering Wi-Fi scans, Bluetooth sweeps, permissions, and troubleshooting.">
+  <link rel="icon" href="assets/app-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html">
+        <img src="assets/app-icon.png" alt="Wi-Fi Radar icon" class="brand-icon">
+        <span>Wi-Fi Radar</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Overview</a>
+        <a href="support.html" aria-current="page">Support</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="app-store.html">App Store Q&amp;A</a>
+      </nav>
+    </header>
+
+    <main class="document-layout">
+      <section class="document-hero">
+        <p class="eyebrow">Support</p>
+        <h1>Wi-Fi Radar Support</h1>
+        <p>Updated: March 23, 2026</p>
+      </section>
+
+      <article class="document-card">
+        <p>
+          Wi-Fi Radar helps you inspect nearby Wi-Fi networks and nearby Bluetooth Low Energy devices on Mac.
+          The app includes a Wi-Fi radar, a Bluetooth radar, copy tools, locally cached restore on launch, and an optional debug console.
+        </p>
+
+        <h2>Requirements</h2>
+        <ul class="document-list">
+          <li>A Mac with Wi-Fi hardware enabled for nearby Wi-Fi scans</li>
+          <li>Bluetooth turned on for Bluetooth sweeps</li>
+          <li>macOS Location Services access granted to Wi-Fi Radar for Wi-Fi scans</li>
+          <li>macOS Bluetooth access granted to Wi-Fi Radar if the system prompts during Bluetooth discovery</li>
+        </ul>
+
+        <h2>Quick start</h2>
+        <ol class="document-list ordered">
+          <li>Open Wi-Fi Radar.</li>
+          <li>If macOS asks for Location Services or Bluetooth permission, allow the request for the feature you want to use.</li>
+          <li>On the Wi-Fi radar, click <code>Refresh Scan</code> to list nearby networks.</li>
+          <li>Switch to <code>Bluetooth Radar</code> and start a sweep to list nearby advertising BLE devices.</li>
+          <li>Sort, search, filter, or use <code>Copy Visible</code> as needed.</li>
+        </ol>
+
+        <h2>Troubleshooting</h2>
+
+        <h3>No networks are shown</h3>
+        <ul class="document-list">
+          <li>Make sure Wi-Fi is enabled on your Mac.</li>
+          <li>Click <code>Refresh Scan</code>.</li>
+          <li>Confirm Location Services is enabled in System Settings.</li>
+          <li>Confirm Wi-Fi Radar has permission under <code>System Settings &gt; Privacy &amp; Security &gt; Location Services</code>.</li>
+        </ul>
+
+        <h3>No Bluetooth devices are shown</h3>
+        <ul class="document-list">
+          <li>Make sure Bluetooth is turned on.</li>
+          <li>Start a new Bluetooth sweep.</li>
+          <li>Confirm Wi-Fi Radar is allowed under <code>System Settings &gt; Privacy &amp; Security &gt; Bluetooth</code> if macOS has asked before.</li>
+          <li>Remember that the Bluetooth radar shows devices that are actively advertising nearby over Bluetooth Low Energy.</li>
+        </ul>
+
+        <h3>BSSIDs are hidden</h3>
+        <p>
+          macOS may hide BSSIDs until location access has been granted.
+          Recheck the app's Location Services permission and refresh the scan.
+        </p>
+
+        <h3>A Bluetooth device is missing</h3>
+        <p>
+          Some devices do not advertise all the time, and some classic Bluetooth devices may not appear if they are not actively advertising over Bluetooth Low Energy.
+          Move closer, wake the device, or run another sweep.
+        </p>
+
+        <h3>Router model looks generic</h3>
+        <p>
+          Router identity in Wi-Fi Radar is a best-effort guess based on SSID patterns and available metadata.
+          Exact models are only shown when the network advertises them clearly.
+        </p>
+
+        <h3>Old results appear immediately on launch</h3>
+        <p>
+          That is expected. Wi-Fi Radar restores recent local Wi-Fi and Bluetooth results from on-device cache so the app does not open empty.
+          Run a fresh scan or sweep any time you want live data.
+        </p>
+
+        <h3>The debug console is not visible</h3>
+        <p>
+          The debug console is hidden by default. Use the <code>Show Debug Console</code> button in the app header
+          when you want to inspect scan logs.
+        </p>
+
+        <h2>Contact support</h2>
+        <ul class="document-list">
+          <li>Email: <code>support@aralel.com</code></li>
+          <li>Website: <code>https://www.aralel.com</code></li>
+          <li>Name or company: <code>Aralel GmbH</code></li>
+        </ul>
+
+        <h2>Information to include in a support request</h2>
+        <ul class="document-list">
+          <li>Your macOS version</li>
+          <li>Whether Location Services is enabled for Wi-Fi Radar</li>
+          <li>Whether Bluetooth access is enabled for Wi-Fi Radar</li>
+          <li>Whether Wi-Fi and Bluetooth are turned on</li>
+          <li>A short description of the issue</li>
+          <li>Copied debug logs, if relevant</li>
+        </ul>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <p>Wi-Fi Radar for macOS</p>
+      <p><a class="text-link" href="privacy.html">Privacy Policy</a></p>
+    </footer>
+  </div>
+</body>
+</html>

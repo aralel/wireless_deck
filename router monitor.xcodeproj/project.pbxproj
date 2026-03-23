@@ -3,344 +3,367 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		08B418584A7C28A61401AAB2 /* router_monitorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3EB6D0731BE8A25270430E /* router_monitorUITests.swift */; };
+		1CE653E111BC59BF85E922F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FEB37E05B7951941D4356667 /* Assets.xcassets */; };
+		3DAFA8E192F60D4E2AC36F27 /* router_monitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EA6821C04914A5F69BD6CE /* router_monitorTests.swift */; };
+		469243C9A03CC227F1D5B8E2 /* WiFiScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B98E2E6750351F689FE89B /* WiFiScanner.swift */; };
+		58E97A07974C88FEB4141B60 /* router_monitorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E20E8FB9FE650ECD7354A8 /* router_monitorApp.swift */; };
+		7249539E5722D4F435669EB8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40873C6C69BCB741F4C539B4 /* ContentView.swift */; };
+		7D7AC4B16C276D01E163A48C /* router_monitorUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E5AC3D7C022EE964749706C /* router_monitorUITestsLaunchTests.swift */; };
+		82A4841DD5C744F09A440408 /* DebugLogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FBD006DD5C60A66F03032DA /* DebugLogStore.swift */; };
+		94CD1E0B9B1D1D9A80164D2B /* WiFiShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74471B23F42E43C02F04583 /* WiFiShared.swift */; };
+		A1165C7B34AE456CC6D4C77E /* BluetoothScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56EF6F22C8A1F353E90FA17 /* BluetoothScanner.swift */; };
+		B1A65DE76126F8F330CF21A5 /* WiFiRadarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97FE5FCDCD7061B59FD3DAE1 /* WiFiRadarView.swift */; };
+		CF4407BFF68B62B229C4752E /* BluetoothRadarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C01A729B08408A7DF8A51C /* BluetoothRadarView.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
-		7D73BB4F2F70084F00630CBA /* PBXContainerItemProxy */ = {
+		373867ECB66205105EB64453 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 7D73BB372F70084D00630CBA /* Project object */;
+			containerPortal = 488F3BE1DF42CCE0E7AB2346 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 7D73BB3E2F70084D00630CBA;
+			remoteGlobalIDString = 19A5FE7383BDBCF07616B579;
 			remoteInfo = "router monitor";
 		};
-		7D73BB592F70084F00630CBA /* PBXContainerItemProxy */ = {
+		CD75854C393CA731BD4821FE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 7D73BB372F70084D00630CBA /* Project object */;
+			containerPortal = 488F3BE1DF42CCE0E7AB2346 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 7D73BB3E2F70084D00630CBA;
+			remoteGlobalIDString = 19A5FE7383BDBCF07616B579;
 			remoteInfo = "router monitor";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7D73BB3F2F70084D00630CBA /* router monitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "router monitor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7D73BB4E2F70084F00630CBA /* router monitorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "router monitorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7D73BB582F70084F00630CBA /* router monitorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "router monitorUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0E5AC3D7C022EE964749706C /* router_monitorUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = router_monitorUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		2991497AE8A817C0924F8C3C /* router monitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "router monitor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C3EB6D0731BE8A25270430E /* router_monitorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = router_monitorUITests.swift; sourceTree = "<group>"; };
+		40873C6C69BCB741F4C539B4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		4376D2DEE58EC0ED61C0CB3F /* router monitorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "router monitorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		53178A2A42048C7075B35868 /* router monitorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "router monitorUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		64EA6821C04914A5F69BD6CE /* router_monitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = router_monitorTests.swift; sourceTree = "<group>"; };
+		6FBD006DD5C60A66F03032DA /* DebugLogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogStore.swift; sourceTree = "<group>"; };
+		97FE5FCDCD7061B59FD3DAE1 /* WiFiRadarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WiFiRadarView.swift; sourceTree = "<group>"; };
+		A56EF6F22C8A1F353E90FA17 /* BluetoothScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothScanner.swift; sourceTree = "<group>"; };
+		B1C01A729B08408A7DF8A51C /* BluetoothRadarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothRadarView.swift; sourceTree = "<group>"; };
+		C4B98E2E6750351F689FE89B /* WiFiScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WiFiScanner.swift; sourceTree = "<group>"; };
+		D74471B23F42E43C02F04583 /* WiFiShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WiFiShared.swift; sourceTree = "<group>"; };
+		D8E20E8FB9FE650ECD7354A8 /* router_monitorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = router_monitorApp.swift; sourceTree = "<group>"; };
+		FEB37E05B7951941D4356667 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		7D73BB412F70084D00630CBA /* router monitor */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "router monitor";
+/* Begin PBXGroup section */
+		57FAD5744C5A48515112DFF8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2991497AE8A817C0924F8C3C /* router monitor.app */,
+				4376D2DEE58EC0ED61C0CB3F /* router monitorTests.xctest */,
+				53178A2A42048C7075B35868 /* router monitorUITests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
-		7D73BB512F70084F00630CBA /* router monitorTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
+		97BA61A675B7D280362E5835 /* router monitorTests */ = {
+			isa = PBXGroup;
+			children = (
+				64EA6821C04914A5F69BD6CE /* router_monitorTests.swift */,
+			);
 			path = "router monitorTests";
 			sourceTree = "<group>";
 		};
-		7D73BB5B2F70084F00630CBA /* router monitorUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
+		AA2921DB589C32EC95D6D8B8 /* router monitor */ = {
+			isa = PBXGroup;
+			children = (
+				FEB37E05B7951941D4356667 /* Assets.xcassets */,
+				B1C01A729B08408A7DF8A51C /* BluetoothRadarView.swift */,
+				A56EF6F22C8A1F353E90FA17 /* BluetoothScanner.swift */,
+				40873C6C69BCB741F4C539B4 /* ContentView.swift */,
+				6FBD006DD5C60A66F03032DA /* DebugLogStore.swift */,
+				D8E20E8FB9FE650ECD7354A8 /* router_monitorApp.swift */,
+				97FE5FCDCD7061B59FD3DAE1 /* WiFiRadarView.swift */,
+				C4B98E2E6750351F689FE89B /* WiFiScanner.swift */,
+			);
+			path = "router monitor";
+			sourceTree = "<group>";
+		};
+		CC860E5880ACD97142355B21 = {
+			isa = PBXGroup;
+			children = (
+				AA2921DB589C32EC95D6D8B8 /* router monitor */,
+				97BA61A675B7D280362E5835 /* router monitorTests */,
+				E47B241A0ABC0603CB71420F /* router monitorUITests */,
+				F8603F8B70653EEE224ED3C8 /* Shared */,
+				57FAD5744C5A48515112DFF8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E47B241A0ABC0603CB71420F /* router monitorUITests */ = {
+			isa = PBXGroup;
+			children = (
+				2C3EB6D0731BE8A25270430E /* router_monitorUITests.swift */,
+				0E5AC3D7C022EE964749706C /* router_monitorUITestsLaunchTests.swift */,
+			);
 			path = "router monitorUITests";
 			sourceTree = "<group>";
 		};
-/* End PBXFileSystemSynchronizedRootGroup section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		7D73BB3C2F70084D00630CBA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7D73BB4B2F70084F00630CBA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7D73BB552F70084F00630CBA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
-/* Begin PBXGroup section */
-		7D73BB362F70084D00630CBA = {
+		F8603F8B70653EEE224ED3C8 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				7D73BB412F70084D00630CBA /* router monitor */,
-				7D73BB512F70084F00630CBA /* router monitorTests */,
-				7D73BB5B2F70084F00630CBA /* router monitorUITests */,
-				7D73BB402F70084D00630CBA /* Products */,
+				D74471B23F42E43C02F04583 /* WiFiShared.swift */,
 			);
-			sourceTree = "<group>";
-		};
-		7D73BB402F70084D00630CBA /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				7D73BB3F2F70084D00630CBA /* router monitor.app */,
-				7D73BB4E2F70084F00630CBA /* router monitorTests.xctest */,
-				7D73BB582F70084F00630CBA /* router monitorUITests.xctest */,
-			);
-			name = Products;
+			path = Shared;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7D73BB3E2F70084D00630CBA /* router monitor */ = {
+		19A5FE7383BDBCF07616B579 /* router monitor */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7D73BB622F70084F00630CBA /* Build configuration list for PBXNativeTarget "router monitor" */;
+			buildConfigurationList = BDDA739AEEC55E4C989B9765 /* Build configuration list for PBXNativeTarget "router monitor" */;
 			buildPhases = (
-				7D73BB3B2F70084D00630CBA /* Sources */,
-				7D73BB3C2F70084D00630CBA /* Frameworks */,
-				7D73BB3D2F70084D00630CBA /* Resources */,
+				21A0CCC2A12481B83BC4D6DE /* Sources */,
+				F1E94EF7BC68CAF8D8058C6B /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				7D73BB412F70084D00630CBA /* router monitor */,
 			);
 			name = "router monitor";
 			packageProductDependencies = (
 			);
 			productName = "router monitor";
-			productReference = 7D73BB3F2F70084D00630CBA /* router monitor.app */;
+			productReference = 2991497AE8A817C0924F8C3C /* router monitor.app */;
 			productType = "com.apple.product-type.application";
 		};
-		7D73BB4D2F70084F00630CBA /* router monitorTests */ = {
+		2CA574B7F0AA6778F04DA3BB /* router monitorUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7D73BB652F70084F00630CBA /* Build configuration list for PBXNativeTarget "router monitorTests" */;
+			buildConfigurationList = 32FF6755EF7BEF05E9FC4E60 /* Build configuration list for PBXNativeTarget "router monitorUITests" */;
 			buildPhases = (
-				7D73BB4A2F70084F00630CBA /* Sources */,
-				7D73BB4B2F70084F00630CBA /* Frameworks */,
-				7D73BB4C2F70084F00630CBA /* Resources */,
+				0290F32DCAE0682C2AF3ABB5 /* Sources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				7D73BB502F70084F00630CBA /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				7D73BB512F70084F00630CBA /* router monitorTests */,
-			);
-			name = "router monitorTests";
-			packageProductDependencies = (
-			);
-			productName = "router monitorTests";
-			productReference = 7D73BB4E2F70084F00630CBA /* router monitorTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		7D73BB572F70084F00630CBA /* router monitorUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 7D73BB682F70084F00630CBA /* Build configuration list for PBXNativeTarget "router monitorUITests" */;
-			buildPhases = (
-				7D73BB542F70084F00630CBA /* Sources */,
-				7D73BB552F70084F00630CBA /* Frameworks */,
-				7D73BB562F70084F00630CBA /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				7D73BB5A2F70084F00630CBA /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				7D73BB5B2F70084F00630CBA /* router monitorUITests */,
+				4191CC8BD474B41FC2D1768E /* PBXTargetDependency */,
 			);
 			name = "router monitorUITests";
 			packageProductDependencies = (
 			);
 			productName = "router monitorUITests";
-			productReference = 7D73BB582F70084F00630CBA /* router monitorUITests.xctest */;
+			productReference = 53178A2A42048C7075B35868 /* router monitorUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		90A2EF03102CFBDBA5A9F881 /* router monitorTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 183C399D7BE6A3844562C2CF /* Build configuration list for PBXNativeTarget "router monitorTests" */;
+			buildPhases = (
+				0716F15B0638088D87E07671 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				808AD74C7F9A5E4834CC3952 /* PBXTargetDependency */,
+			);
+			name = "router monitorTests";
+			packageProductDependencies = (
+			);
+			productName = "router monitorTests";
+			productReference = 4376D2DEE58EC0ED61C0CB3F /* router monitorTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		7D73BB372F70084D00630CBA /* Project object */ = {
+		488F3BE1DF42CCE0E7AB2346 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2630;
+				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 2630;
 				TargetAttributes = {
-					7D73BB3E2F70084D00630CBA = {
-						CreatedOnToolsVersion = 26.3;
+					19A5FE7383BDBCF07616B579 = {
+						DevelopmentTeam = QP23LM42KN;
+						ProvisioningStyle = Automatic;
 					};
-					7D73BB4D2F70084F00630CBA = {
-						CreatedOnToolsVersion = 26.3;
-						TestTargetID = 7D73BB3E2F70084D00630CBA;
+					2CA574B7F0AA6778F04DA3BB = {
+						DevelopmentTeam = QP23LM42KN;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 19A5FE7383BDBCF07616B579;
 					};
-					7D73BB572F70084F00630CBA = {
-						CreatedOnToolsVersion = 26.3;
-						TestTargetID = 7D73BB3E2F70084D00630CBA;
+					90A2EF03102CFBDBA5A9F881 = {
+						DevelopmentTeam = QP23LM42KN;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
-			buildConfigurationList = 7D73BB3A2F70084D00630CBA /* Build configuration list for PBXProject "router monitor" */;
+			buildConfigurationList = 1A28DB5280BBA0A8053B203E /* Build configuration list for PBXProject "router monitor" */;
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				en,
 			);
-			mainGroup = 7D73BB362F70084D00630CBA;
+			mainGroup = CC860E5880ACD97142355B21;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
-			productRefGroup = 7D73BB402F70084D00630CBA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7D73BB3E2F70084D00630CBA /* router monitor */,
-				7D73BB4D2F70084F00630CBA /* router monitorTests */,
-				7D73BB572F70084F00630CBA /* router monitorUITests */,
+				19A5FE7383BDBCF07616B579 /* router monitor */,
+				90A2EF03102CFBDBA5A9F881 /* router monitorTests */,
+				2CA574B7F0AA6778F04DA3BB /* router monitorUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		7D73BB3D2F70084D00630CBA /* Resources */ = {
+		F1E94EF7BC68CAF8D8058C6B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7D73BB4C2F70084F00630CBA /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7D73BB562F70084F00630CBA /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				1CE653E111BC59BF85E922F6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		7D73BB3B2F70084D00630CBA /* Sources */ = {
+		0290F32DCAE0682C2AF3ABB5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08B418584A7C28A61401AAB2 /* router_monitorUITests.swift in Sources */,
+				7D7AC4B16C276D01E163A48C /* router_monitorUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7D73BB4A2F70084F00630CBA /* Sources */ = {
+		0716F15B0638088D87E07671 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DAFA8E192F60D4E2AC36F27 /* router_monitorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7D73BB542F70084F00630CBA /* Sources */ = {
+		21A0CCC2A12481B83BC4D6DE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF4407BFF68B62B229C4752E /* BluetoothRadarView.swift in Sources */,
+				A1165C7B34AE456CC6D4C77E /* BluetoothScanner.swift in Sources */,
+				7249539E5722D4F435669EB8 /* ContentView.swift in Sources */,
+				82A4841DD5C744F09A440408 /* DebugLogStore.swift in Sources */,
+				B1A65DE76126F8F330CF21A5 /* WiFiRadarView.swift in Sources */,
+				469243C9A03CC227F1D5B8E2 /* WiFiScanner.swift in Sources */,
+				94CD1E0B9B1D1D9A80164D2B /* WiFiShared.swift in Sources */,
+				58E97A07974C88FEB4141B60 /* router_monitorApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		7D73BB502F70084F00630CBA /* PBXTargetDependency */ = {
+		4191CC8BD474B41FC2D1768E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7D73BB3E2F70084D00630CBA /* router monitor */;
-			targetProxy = 7D73BB4F2F70084F00630CBA /* PBXContainerItemProxy */;
+			target = 19A5FE7383BDBCF07616B579 /* router monitor */;
+			targetProxy = 373867ECB66205105EB64453 /* PBXContainerItemProxy */;
 		};
-		7D73BB5A2F70084F00630CBA /* PBXTargetDependency */ = {
+		808AD74C7F9A5E4834CC3952 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7D73BB3E2F70084D00630CBA /* router monitor */;
-			targetProxy = 7D73BB592F70084F00630CBA /* PBXContainerItemProxy */;
+			target = 19A5FE7383BDBCF07616B579 /* router monitor */;
+			targetProxy = CD75854C393CA731BD4821FE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		7D73BB602F70084F00630CBA /* Debug */ = {
+		46AC61DEB0A2C1C732E9DBCD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = QP23LM42KN;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
 				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.2;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.aralel.router-monitorUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = "router monitor";
 			};
 			name = Debug;
 		};
-		7D73BB612F70084F00630CBA /* Release */ = {
+		5CFD42A59DA8655328C1FEA6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_LOCATION = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "router monitor uses Bluetooth access to discover nearby Bluetooth Low Energy devices, show their names, signal strength, services, and related diagnostics.";
+				INFOPLIST_KEY_CFBundleDisplayName = "WiFi Radar";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "router monitor uses your location permission so macOS will let it scan nearby Wi-Fi networks and show their SSIDs and BSSIDs.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.aralel.router-monitor";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		60B3ACC5AE42B97750E8CF0D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.aralel.router-monitorUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = "router monitor";
+			};
+			name = Release;
+		};
+		69CFED301875C5E0AD081D66 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -366,13 +389,16 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = QP23LM42KN;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -380,199 +406,206 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				SDKROOT = macosx;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
-		7D73BB632F70084F00630CBA /* Debug */ = {
+		7A85709C6E7CAFDEFFDDF4DE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = QP23LM42KN;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		ACA2D1A8F543A8419D999F15 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QP23LM42KN;
-				ENABLE_APP_SANDBOX = YES;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_LOCATION = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "router monitor uses Bluetooth access to discover nearby Bluetooth Low Energy devices, show their names, signal strength, services, and related diagnostics.";
+				INFOPLIST_KEY_CFBundleDisplayName = "WiFi Radar";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "router monitor uses your location permission so macOS will let it scan nearby Wi-Fi networks and show their SSIDs and BSSIDs.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.aralel.router-monitor";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		7D73BB642F70084F00630CBA /* Release */ = {
+		B870402DFD004E2C8984C051 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QP23LM42KN;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.aralel.router-monitor";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				REGISTER_APP_GROUPS = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
-		7D73BB662F70084F00630CBA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QP23LM42KN;
-				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.2;
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.aralel.router-monitorTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/router monitor.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/router monitor";
-			};
-			name = Debug;
-		};
-		7D73BB672F70084F00630CBA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QP23LM42KN;
-				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.aralel.router-monitorTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/router monitor.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/router monitor";
 			};
 			name = Release;
 		};
-		7D73BB692F70084F00630CBA /* Debug */ = {
+		C02BAA3C4B66B8B36B775E02 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QP23LM42KN;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.aralel.router-monitorUITests";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.aralel.router-monitorTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = "router monitor";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/router monitor.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/router monitor";
 			};
 			name = Debug;
-		};
-		7D73BB6A2F70084F00630CBA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QP23LM42KN;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.aralel.router-monitorUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = "router monitor";
-			};
-			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7D73BB3A2F70084D00630CBA /* Build configuration list for PBXProject "router monitor" */ = {
+		183C399D7BE6A3844562C2CF /* Build configuration list for PBXNativeTarget "router monitorTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7D73BB602F70084F00630CBA /* Debug */,
-				7D73BB612F70084F00630CBA /* Release */,
+				C02BAA3C4B66B8B36B775E02 /* Debug */,
+				B870402DFD004E2C8984C051 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		7D73BB622F70084F00630CBA /* Build configuration list for PBXNativeTarget "router monitor" */ = {
+		1A28DB5280BBA0A8053B203E /* Build configuration list for PBXProject "router monitor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7D73BB632F70084F00630CBA /* Debug */,
-				7D73BB642F70084F00630CBA /* Release */,
+				7A85709C6E7CAFDEFFDDF4DE /* Debug */,
+				69CFED301875C5E0AD081D66 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		7D73BB652F70084F00630CBA /* Build configuration list for PBXNativeTarget "router monitorTests" */ = {
+		32FF6755EF7BEF05E9FC4E60 /* Build configuration list for PBXNativeTarget "router monitorUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7D73BB662F70084F00630CBA /* Debug */,
-				7D73BB672F70084F00630CBA /* Release */,
+				46AC61DEB0A2C1C732E9DBCD /* Debug */,
+				60B3ACC5AE42B97750E8CF0D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		7D73BB682F70084F00630CBA /* Build configuration list for PBXNativeTarget "router monitorUITests" */ = {
+		BDDA739AEEC55E4C989B9765 /* Build configuration list for PBXNativeTarget "router monitor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7D73BB692F70084F00630CBA /* Debug */,
-				7D73BB6A2F70084F00630CBA /* Release */,
+				ACA2D1A8F543A8419D999F15 /* Debug */,
+				5CFD42A59DA8655328C1FEA6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 7D73BB372F70084D00630CBA /* Project object */;
+	rootObject = 488F3BE1DF42CCE0E7AB2346 /* Project object */;
 }
