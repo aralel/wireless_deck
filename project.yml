@@ -25,12 +25,12 @@ targets:
       base:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_ENTITLEMENTS: "router monitor/router monitor.entitlements"
         COMBINE_HIDPI_IMAGES: "YES"
-        ENABLE_APP_SANDBOX: "NO"
+        ENABLE_APP_SANDBOX: "YES"
         ENABLE_HARDENED_RUNTIME: "YES"
         ENABLE_PREVIEWS: "YES"
         ENABLE_RESOURCE_ACCESS_LOCATION: "YES"
-        ENABLE_USER_SELECTED_FILES: readonly
         GENERATE_INFOPLIST_FILE: "YES"
         INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: "router monitor uses Bluetooth access to discover nearby Bluetooth Low Energy devices, show their names, signal strength, services, and related diagnostics."
         INFOPLIST_KEY_NSHumanReadableCopyright: ""
