@@ -315,7 +315,7 @@
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "router monitor uses Bluetooth access to discover nearby Bluetooth Low Energy devices, show their names, signal strength, services, and related diagnostics.";
-				INFOPLIST_KEY_CFBundleDisplayName = "WiFi Radar";
+				INFOPLIST_KEY_CFBundleDisplayName = "Wireless Deck";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "router monitor uses your location permission so macOS will let it scan nearby Wi-Fi networks and show their SSIDs and BSSIDs.";
@@ -503,7 +503,7 @@
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "router monitor uses Bluetooth access to discover nearby Bluetooth Low Energy devices, show their names, signal strength, services, and related diagnostics.";
-				INFOPLIST_KEY_CFBundleDisplayName = "WiFi Radar";
+				INFOPLIST_KEY_CFBundleDisplayName = "Wireless Deck";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "router monitor uses your location permission so macOS will let it scan nearby Wi-Fi networks and show their SSIDs and BSSIDs.";

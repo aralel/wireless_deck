@@ -3,7 +3,7 @@
 Generated on March 23, 2026 for the verified macOS target:
 
 - App bundle ID: `com.aralel.router-monitor`
-- Display name in project: `WiFi Radar`
+- Display name in project: `Wireless Deck`
 - Marketing version: `1.0`
 - Category in project: `Utilities`
 
@@ -13,7 +13,7 @@ This pack is written for the macOS app currently present in the workspace. The p
 
 ### App name
 
-`Wi-Fi Radar`
+`Wireless Deck`
 
 Length: 11 / 30
 
@@ -31,13 +31,13 @@ Length: 150 / 170
 
 ### Description
 
-`Wi-Fi Radar helps you inspect the wireless environment around your Mac.
+`Wireless Deck helps you inspect the wireless environment around your Mac.
 
 Use the Wi-Fi radar to scan nearby networks and view SSID, BSSID, signal, noise, channel, band, security, and router hints. Use the Bluetooth radar to sweep nearby Bluetooth Low Energy devices, compare signal strength, review service summaries, and inspect advertising details.
 
 Sort and filter both views instantly, search live, copy visible rows for diagnostics, and open the optional debug console when you need deeper troubleshooting. Recent Wi-Fi and Bluetooth results are cached locally so the app can restore your last view on launch instead of opening empty.
 
-Use Wi-Fi Radar to:
+Use Wireless Deck to:
 - inspect nearby Wi-Fi access points
 - sweep nearby Bluetooth LE devices
 - compare signal quality and radio conditions
@@ -48,7 +48,7 @@ Important:
 - macOS requires Location Services permission before apps can access nearby Wi-Fi names and BSSIDs
 - macOS may require Bluetooth permission before the app can discover nearby BLE devices
 - Bluetooth results show devices that are actively advertising nearby
-- Wi-Fi Radar does not require an account and does not upload your scan results or debug logs`
+- Wireless Deck does not require an account and does not upload your scan results or debug logs`
 
 ### Keywords
 
@@ -80,7 +80,7 @@ Optional. Leave blank if you do not have a product website yet.
 
 ### Review notes
 
-`Wi-Fi Radar is a macOS utility with two local discovery surfaces: a Wi-Fi radar built on CoreWLAN and a Bluetooth radar for nearby Bluetooth Low Energy devices.
+`Wireless Deck is a macOS utility with two local discovery surfaces: a Wi-Fi radar built on CoreWLAN and a Bluetooth radar for nearby Bluetooth Low Energy devices.
 
 The Wi-Fi radar shows SSID, BSSID, signal, noise, channel, band, security, and router hints. The Bluetooth radar shows nearby BLE devices, signal strength, service summaries, connectability hints, and advertising details.
 
@@ -136,13 +136,13 @@ Reasoning:
 
 Use this if asked why the app requests location permission:
 
-`The app requests location authorization because macOS requires it before third-party apps can access nearby Wi-Fi SSIDs and BSSIDs. Wi-Fi Radar does not collect or transmit the user's geographic location.`
+`The app requests location authorization because macOS requires it before third-party apps can access nearby Wi-Fi SSIDs and BSSIDs. Wireless Deck does not collect or transmit the user's geographic location.`
 
 ### Bluetooth explanation for App Review
 
 Use this if asked why the app requests Bluetooth permission:
 
-`The app may request Bluetooth permission so the Bluetooth radar can discover nearby Bluetooth Low Energy devices on Mac. Wi-Fi Radar does not upload discovered device identifiers or build remote profiles from them.`
+`The app may request Bluetooth permission so the Bluetooth radar can discover nearby Bluetooth Low Energy devices on Mac. Wireless Deck does not upload discovered device identifiers or build remote profiles from them.`
 
 ## Optional screenshot captions
 
@@ -158,7 +158,7 @@ If you want short marketing text for screenshots, use these:
 
 Use this for future updates, or adapt it if you want an internal launch note:
 
-`Initial release of Wi-Fi Radar with nearby Wi-Fi scanning, Bluetooth LE sweeps, router hints, sortable results, signal-quality views, cached restore, export tools, and an optional debug console for troubleshooting permission and scan issues.`
+`Initial release of Wireless Deck with nearby Wi-Fi scanning, Bluetooth LE sweeps, router hints, sortable results, signal-quality views, cached restore, export tools, and an optional debug console for troubleshooting permission and scan issues.`
 
 ## Short answer sheet
 

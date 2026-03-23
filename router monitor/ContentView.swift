@@ -17,9 +17,9 @@ private enum RadarSurface: String, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .wifi:
-            return "Wi-Fi Radar"
+            return "Wi-Fi"
         case .bluetooth:
-            return "Bluetooth Radar"
+            return "Bluetooth"
         }
     }
 
