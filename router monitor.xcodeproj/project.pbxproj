@@ -19,6 +19,7 @@
 		A1165C7B34AE456CC6D4C77E /* BluetoothScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56EF6F22C8A1F353E90FA17 /* BluetoothScanner.swift */; };
 		B1A65DE76126F8F330CF21A5 /* WiFiRadarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97FE5FCDCD7061B59FD3DAE1 /* WiFiRadarView.swift */; };
 		CF4407BFF68B62B229C4752E /* BluetoothRadarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C01A729B08408A7DF8A51C /* BluetoothRadarView.swift */; };
+		E5C3C4A1A0A1B2C3D4E5F601 /* WirelessTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C3C4A1A0A1B2C3D4E5F602 /* WirelessTelemetry.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		C4B98E2E6750351F689FE89B /* WiFiScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WiFiScanner.swift; sourceTree = "<group>"; };
 		D74471B23F42E43C02F04583 /* WiFiShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WiFiShared.swift; sourceTree = "<group>"; };
 		D8E20E8FB9FE650ECD7354A8 /* router_monitorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = router_monitorApp.swift; sourceTree = "<group>"; };
+		E5C3C4A1A0A1B2C3D4E5F602 /* WirelessTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WirelessTelemetry.swift; sourceTree = "<group>"; };
 		FEB37E05B7951941D4356667 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -113,6 +115,7 @@
 		F8603F8B70653EEE224ED3C8 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				E5C3C4A1A0A1B2C3D4E5F602 /* WirelessTelemetry.swift */,
 				D74471B23F42E43C02F04583 /* WiFiShared.swift */,
 			);
 			path = Shared;
@@ -259,6 +262,7 @@
 				B1A65DE76126F8F330CF21A5 /* WiFiRadarView.swift in Sources */,
 				469243C9A03CC227F1D5B8E2 /* WiFiScanner.swift in Sources */,
 				94CD1E0B9B1D1D9A80164D2B /* WiFiShared.swift in Sources */,
+				E5C3C4A1A0A1B2C3D4E5F601 /* WirelessTelemetry.swift in Sources */,
 				58E97A07974C88FEB4141B60 /* router_monitorApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -303,20 +307,21 @@
 		};
 		5CFD42A59DA8655328C1FEA6 /* Release */ = {
 			isa = XCBuildConfiguration;
-				buildSettings = {
-					ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-					ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-					CODE_SIGN_ENTITLEMENTS = "router monitor/router monitor.entitlements";
-					COMBINE_HIDPI_IMAGES = YES;
-					DEAD_CODE_STRIPPING = YES;
-					ENABLE_APP_SANDBOX = YES;
-					ENABLE_HARDENED_RUNTIME = YES;
-					ENABLE_PREVIEWS = YES;
-					ENABLE_RESOURCE_ACCESS_LOCATION = YES;
-					GENERATE_INFOPLIST_FILE = YES;
-					INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "router monitor uses Bluetooth access to discover nearby Bluetooth Low Energy devices, show their names, signal strength, services, and related diagnostics.";
-					INFOPLIST_KEY_CFBundleDisplayName = "Wireless Deck";
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "router monitor/router monitor.entitlements";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_LOCATION = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Wireless Deck";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "router monitor uses Bluetooth access to discover nearby Bluetooth Low Energy devices, show their names, signal strength, services, and related diagnostics.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "router monitor uses your location permission so macOS will let it scan nearby Wi-Fi networks and show their SSIDs and BSSIDs.";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -324,6 +329,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.aralel.router-monitor";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -491,20 +497,21 @@
 		};
 		ACA2D1A8F543A8419D999F15 /* Debug */ = {
 			isa = XCBuildConfiguration;
-				buildSettings = {
-					ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-					ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-					CODE_SIGN_ENTITLEMENTS = "router monitor/router monitor.entitlements";
-					COMBINE_HIDPI_IMAGES = YES;
-					DEAD_CODE_STRIPPING = YES;
-					ENABLE_APP_SANDBOX = YES;
-					ENABLE_HARDENED_RUNTIME = YES;
-					ENABLE_PREVIEWS = YES;
-					ENABLE_RESOURCE_ACCESS_LOCATION = YES;
-					GENERATE_INFOPLIST_FILE = YES;
-					INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "router monitor uses Bluetooth access to discover nearby Bluetooth Low Energy devices, show their names, signal strength, services, and related diagnostics.";
-					INFOPLIST_KEY_CFBundleDisplayName = "Wireless Deck";
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "router monitor/router monitor.entitlements";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_LOCATION = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Wireless Deck";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "router monitor uses Bluetooth access to discover nearby Bluetooth Low Energy devices, show their names, signal strength, services, and related diagnostics.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "router monitor uses your location permission so macOS will let it scan nearby Wi-Fi networks and show their SSIDs and BSSIDs.";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -512,6 +519,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.aralel.router-monitor";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;

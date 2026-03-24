@@ -5,6 +5,7 @@
 //  Created by Codex on 22.03.2026.
 //
 
+import AppKit
 import Combine
 import CoreLocation
 import CoreWLAN
@@ -14,6 +15,7 @@ struct WiFiNetwork: Identifiable, Equatable, Sendable, Codable {
     let id: String
     let ssid: String
     let bssid: String?
+    let vendorName: String?
     let routerSummary: String
     let security: String
     let signalStrength: Int
@@ -22,8 +24,16 @@ struct WiFiNetwork: Identifiable, Equatable, Sendable, Codable {
     let band: String
     let isCurrentNetwork: Bool
 
+    nonisolated var historyKey: String {
+        bssid ?? "ssid:\(ssid.lowercased())"
+    }
+
     nonisolated var displayBSSID: String {
         bssid ?? "Hidden until location access is granted"
+    }
+
+    nonisolated var vendorDisplayName: String {
+        vendorName ?? "Unknown"
     }
 
     nonisolated var signalDescription: String {
@@ -37,6 +47,10 @@ struct WiFiNetwork: Identifiable, Equatable, Sendable, Codable {
     nonisolated var signalBars: Int {
         WiFiSignalPresentation.bars(forRSSI: signalStrength)
     }
+
+    nonisolated var noiseMargin: Int {
+        signalStrength - noise
+    }
 }
 
 @MainActor
@@ -46,9 +60,17 @@ final class WiFiScannerController: NSObject, ObservableObject {
     @Published private(set) var lastScanDate: Date?
     @Published private(set) var permissionState: WiFiPermissionState = .notDetermined
     @Published private(set) var errorMessage: String?
+    @Published private(set) var sandboxInterfaceUnavailable = false
+    @Published private(set) var nextAutomaticRetryDate: Date?
+
+    var onScanCompleted: (([WiFiNetwork], Date) -> Void)?
 
     private let locationManager = CLLocationManager()
     private let autoRefreshInterval: TimeInterval = 20
+    private let sandboxRetryDelays: [TimeInterval] = [2, 5, 12]
+    private var sandboxRetryAttempt = 0
+    private var sandboxRetryTask: Task<Void, Never>?
+    private var lifecycleCancellables: Set<AnyCancellable> = []
 
     var hasVisibleBSSIDs: Bool {
         networks.contains(where: { $0.bssid != nil })
@@ -59,6 +81,10 @@ final class WiFiScannerController: NSObject, ObservableObject {
         case .authorized:
             if isScanning {
                 return "Scanning nearby access points..."
+            }
+
+            if sandboxInterfaceUnavailable {
+                return "Nearby Wi-Fi scanning is blocked in this sandboxed build on this Mac"
             }
 
             if let errorMessage {
@@ -87,6 +113,7 @@ final class WiFiScannerController: NSObject, ObservableObject {
         AppLog.info("scan", "Wi-Fi scanner initialized")
         restoreCachedSnapshot()
         updatePermissionState()
+        configureLifecycleObservers()
     }
 
     func prepare() {
@@ -142,10 +169,21 @@ final class WiFiScannerController: NSObject, ObservableObject {
                 networks = refreshedNetworks
                 lastScanDate = .now
                 errorMessage = nil
+                sandboxInterfaceUnavailable = false
+                resetSandboxRetryState()
                 persistSnapshot()
+                if let lastScanDate {
+                    onScanCompleted?(refreshedNetworks, lastScanDate)
+                }
                 AppLog.info("scan", "Scan completed successfully with \(refreshedNetworks.count) networks")
             } catch {
                 errorMessage = Self.friendlyMessage(for: error)
+                sandboxInterfaceUnavailable = Self.isSandboxInterfaceFailure(error)
+                if sandboxInterfaceUnavailable {
+                    scheduleSandboxRetry(reason: "no Wi-Fi interface was visible")
+                } else {
+                    resetSandboxRetryState()
+                }
                 AppLog.error("scan", "Scan failed: \(Self.friendlyMessage(for: error)). Preserving \(networks.count) cached networks")
             }
 
@@ -220,6 +258,12 @@ final class WiFiScannerController: NSObject, ObservableObject {
             return
         }
 
+        if sandboxInterfaceUnavailable && !force {
+            scheduleSandboxRetry(reason: reason)
+            AppLog.debug("scan", "Automatic Wi-Fi scan skipped because CoreWLAN has no visible interface in the current sandboxed environment")
+            return
+        }
+
         let shouldRefresh = force || networks.isEmpty || lastScanDate == nil || isDataStale
 
         guard shouldRefresh else {
@@ -236,6 +280,100 @@ final class WiFiScannerController: NSObject, ObservableObject {
         }
 
         return Date().timeIntervalSince(lastScanDate) >= autoRefreshInterval
+    }
+
+    private func configureLifecycleObservers() {
+        NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)
+            .sink { [weak self] _ in
+                Task { @MainActor in
+                    self?.handleLifecycleEvent(reason: "the app became active")
+                }
+            }
+            .store(in: &lifecycleCancellables)
+
+        NSWorkspace.shared.notificationCenter.publisher(for: NSWorkspace.didWakeNotification)
+            .sink { [weak self] _ in
+                Task { @MainActor in
+                    self?.handleLifecycleEvent(reason: "the Mac woke from sleep")
+                }
+            }
+            .store(in: &lifecycleCancellables)
+    }
+
+    private func handleLifecycleEvent(reason: String) {
+        guard permissionState == .authorized, !isScanning else {
+            return
+        }
+
+        let shouldRetryNow = sandboxInterfaceUnavailable || networks.isEmpty || isDataStale
+        guard shouldRetryNow else {
+            return
+        }
+
+        AppLog.info("scan", "Preparing a Wi-Fi refresh because \(reason)")
+        autoRefreshIfNeeded(reason: reason, force: sandboxInterfaceUnavailable || networks.isEmpty)
+    }
+
+    private func scheduleSandboxRetry(reason: String) {
+        guard permissionState == .authorized, sandboxInterfaceUnavailable else {
+            return
+        }
+
+        guard sandboxRetryTask == nil else {
+            return
+        }
+
+        guard sandboxRetryAttempt < sandboxRetryDelays.count else {
+            nextAutomaticRetryDate = nil
+            AppLog.warning("scan", "Automatic Wi-Fi interface retries are exhausted for now. Manual refresh or app wake will try again.")
+            return
+        }
+
+        let delay = sandboxRetryDelays[sandboxRetryAttempt]
+        sandboxRetryAttempt += 1
+        nextAutomaticRetryDate = Date().addingTimeInterval(delay)
+
+        AppLog.info(
+            "scan",
+            "Scheduling Wi-Fi interface retry in \(Int(delay))s because \(reason) attempt=\(sandboxRetryAttempt)/\(sandboxRetryDelays.count)"
+        )
+
+        sandboxRetryTask = Task { [weak self] in
+            let duration = UInt64(delay * 1_000_000_000)
+            do {
+                try await Task.sleep(nanoseconds: duration)
+            } catch {
+                return
+            }
+
+            guard !Task.isCancelled else {
+                return
+            }
+
+            guard let self else { return }
+            await MainActor.run {
+                self.runScheduledSandboxRetry()
+            }
+        }
+    }
+
+    private func runScheduledSandboxRetry() {
+        sandboxRetryTask = nil
+        nextAutomaticRetryDate = nil
+
+        guard permissionState == .authorized, sandboxInterfaceUnavailable, !isScanning else {
+            return
+        }
+
+        AppLog.info("scan", "Retrying Wi-Fi interface discovery after scheduled backoff")
+        refresh()
+    }
+
+    private func resetSandboxRetryState() {
+        sandboxRetryTask?.cancel()
+        sandboxRetryTask = nil
+        nextAutomaticRetryDate = nil
+        sandboxRetryAttempt = 0
     }
 
     nonisolated private static func loadNearbyNetworks() throws -> [WiFiNetwork] {
@@ -271,12 +409,14 @@ final class WiFiScannerController: NSObject, ObservableObject {
                 let channel = network.wlanChannel?.channelNumber ?? 0
                 let band = bandLabel(for: network.wlanChannel?.channelBand)
                 let isCurrentNetwork = ssid == currentSSID && (currentBSSID == nil || currentBSSID == bssid)
+                let vendorName = WiFiVendorCatalog.vendorName(for: bssid)
 
                 return WiFiNetwork(
                     id: bssid ?? "\(ssid)-\(channel)-\(network.rssiValue)-\(network.noiseMeasurement)",
                     ssid: ssid,
                     bssid: bssid,
-                    routerSummary: RouterIdentity.inferRouter(from: ssid, bssid: bssid),
+                    vendorName: vendorName,
+                    routerSummary: RouterIdentity.inferRouter(from: ssid, bssid: bssid, vendorName: vendorName),
                     security: securityLabel(for: network),
                     signalStrength: network.rssiValue,
                     noise: network.noiseMeasurement,
@@ -360,6 +500,17 @@ final class WiFiScannerController: NSObject, ObservableObject {
 
         return nsError.localizedDescription
     }
+
+    nonisolated private static func isSandboxInterfaceFailure(_ error: Error) -> Bool {
+        guard let scanError = error as? ScanError else {
+            return false
+        }
+
+        switch scanError {
+        case .noInterface(_, let sandboxed):
+            return sandboxed
+        }
+    }
 }
 
 extension WiFiScannerController: CLLocationManagerDelegate {
@@ -368,8 +519,10 @@ extension WiFiScannerController: CLLocationManagerDelegate {
         updatePermissionState()
 
         if permissionState == .authorized {
+            resetSandboxRetryState()
             autoRefreshIfNeeded(reason: "location authorization changed", force: true)
         } else if !networks.isEmpty {
+            resetSandboxRetryState()
             AppLog.warning("permissions", "PermissionState=\(permissionState.debugName). Keeping \(networks.count) cached networks until a fresh authorized scan is possible")
         }
     }
@@ -383,7 +536,7 @@ enum ScanError: LocalizedError {
         case .noInterface(let interfaceNames, let sandboxed):
             if interfaceNames.isEmpty {
                 if sandboxed {
-                    return "No Wi-Fi interface is visible to the app. App Sandbox usually causes this even when the Mac itself has Wi-Fi."
+                    return "No Wi-Fi interface is visible to the app. This sandboxed build can use cached Wi-Fi history, but nearby CoreWLAN scans are blocked on this Mac."
                 }
 
                 return "No Wi-Fi interface is available on this Mac."

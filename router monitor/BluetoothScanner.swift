@@ -15,6 +15,7 @@ struct BluetoothDevice: Identifiable, Equatable, Sendable, Codable {
     let typeGuess: String
     let identifierString: String
     let localName: String?
+    let vendorName: String?
     let isConnectable: Bool?
     let serviceSummary: String
     let serviceCount: Int
@@ -23,8 +24,16 @@ struct BluetoothDevice: Identifiable, Equatable, Sendable, Codable {
     let lastSeenDate: Date
     let seenCount: Int
 
+    nonisolated var historyKey: String {
+        identifierString
+    }
+
     nonisolated var signalDescription: String {
         WiFiSignalPresentation.description(forRSSI: signalStrength)
+    }
+
+    nonisolated var vendorDisplayName: String {
+        vendorName ?? "Unknown"
     }
 
     nonisolated var signalPercent: Int {
@@ -83,6 +92,22 @@ struct BluetoothDevice: Identifiable, Equatable, Sendable, Codable {
         return "Edge of range"
     }
 
+    nonisolated var proximityBucket: Int {
+        if signalStrength >= -55 {
+            return 4
+        }
+
+        if signalStrength >= -67 {
+            return 3
+        }
+
+        if signalStrength >= -75 {
+            return 2
+        }
+
+        return 1
+    }
+
     nonisolated var stabilitySummary: String {
         switch seenCount {
         case 8...:
@@ -115,14 +140,19 @@ final class BluetoothScannerController: NSObject, ObservableObject {
     @Published private(set) var lastScanDate: Date?
     @Published private(set) var availabilityState: BluetoothAvailabilityState = .unknown
     @Published private(set) var errorMessage: String?
+    @Published private(set) var proximityTargetID: BluetoothDevice.ID?
 
     private var centralManager: CBCentralManager?
     private var stopScanTask: Task<Void, Never>?
+    private var scheduledRepeatSweepTask: Task<Void, Never>?
     private var loggedDeviceIdentifiers: Set<UUID> = []
     private var currentSweepDevices: [UUID: BluetoothDevice] = [:]
+    private var liveSignalSamplesByDevice: [UUID: [SignalTimelineSample]] = [:]
 
     private let scanDuration: Duration = .seconds(8)
     private let autoSweepInterval: TimeInterval = 25
+
+    var onSweepCompleted: (([BluetoothDevice], Date) -> Void)?
 
     var connectableDevicesCount: Int {
         devices.filter { $0.isConnectable == true }.count
@@ -169,6 +199,7 @@ final class BluetoothScannerController: NSObject, ObservableObject {
 
     deinit {
         stopScanTask?.cancel()
+        scheduledRepeatSweepTask?.cancel()
         centralManager?.stopScan()
     }
 
@@ -218,7 +249,32 @@ final class BluetoothScannerController: NSObject, ObservableObject {
     }
 
     func stop() {
+        proximityTargetID = nil
+        scheduledRepeatSweepTask?.cancel()
         finishScanSweep(reason: "stopped by user")
+    }
+
+    func setProximityTarget(_ deviceID: BluetoothDevice.ID?) {
+        guard proximityTargetID != deviceID else {
+            return
+        }
+
+        proximityTargetID = deviceID
+        scheduledRepeatSweepTask?.cancel()
+
+        if let deviceID {
+            AppLog.info("bluetooth", "Bluetooth proximity mode focused on device=\(deviceID.uuidString.lowercased())")
+
+            if !isScanning {
+                refresh()
+            }
+        } else {
+            AppLog.info("bluetooth", "Bluetooth proximity mode cleared")
+        }
+    }
+
+    func liveTimeline(for deviceID: BluetoothDevice.ID) -> [SignalTimelineSample] {
+        liveSignalSamplesByDevice[deviceID] ?? []
     }
 
     private func ensureCentralManager() {
@@ -241,6 +297,7 @@ final class BluetoothScannerController: NSObject, ObservableObject {
         }
 
         stopScanTask?.cancel()
+        scheduledRepeatSweepTask?.cancel()
         centralManager.stopScan()
 
         currentSweepDevices.removeAll()
@@ -279,6 +336,10 @@ final class BluetoothScannerController: NSObject, ObservableObject {
         isScanning = false
         lastScanDate = .now
 
+        if let lastScanDate {
+            onSweepCompleted?(discoveredDevices, lastScanDate)
+        }
+
         if !discoveredDevices.isEmpty {
             devices = discoveredDevices
             errorMessage = nil
@@ -291,6 +352,8 @@ final class BluetoothScannerController: NSObject, ObservableObject {
         persistSnapshot()
         currentSweepDevices.removeAll()
         AppLog.info("bluetooth", "Bluetooth sweep \(reason) with \(devices.count) devices")
+
+        scheduleRepeatSweepIfNeeded()
     }
 
     private func updateAvailabilityState() {
@@ -403,6 +466,7 @@ final class BluetoothScannerController: NSObject, ObservableObject {
             ),
             identifierString: peripheral.identifier.uuidString.lowercased(),
             localName: localName,
+            vendorName: BluetoothDeviceIdentity.vendorName(from: manufacturerData, displayName: displayName),
             isConnectable: advertisementData[CBAdvertisementDataIsConnectable] as? Bool,
             serviceSummary: BluetoothServiceCatalog.summary(for: uniqueServiceUUIDs),
             serviceCount: uniqueServiceUUIDs.count,
@@ -420,6 +484,7 @@ final class BluetoothScannerController: NSObject, ObservableObject {
             typeGuess: discovered.typeGuess == BluetoothDeviceIdentity.fallbackTypeGuess ? existing.typeGuess : discovered.typeGuess,
             identifierString: existing.identifierString,
             localName: discovered.localName ?? existing.localName,
+            vendorName: discovered.vendorName ?? existing.vendorName,
             isConnectable: discovered.isConnectable ?? existing.isConnectable,
             serviceSummary: discovered.serviceCount > 0 ? discovered.serviceSummary : existing.serviceSummary,
             serviceCount: max(existing.serviceCount, discovered.serviceCount),
@@ -475,6 +540,34 @@ final class BluetoothScannerController: NSObject, ObservableObject {
         refresh()
     }
 
+    private func scheduleRepeatSweepIfNeeded() {
+        guard proximityTargetID != nil, availabilityState == .ready else {
+            return
+        }
+
+        scheduledRepeatSweepTask?.cancel()
+        scheduledRepeatSweepTask = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(1))
+            guard let self else { return }
+            guard proximityTargetID != nil, availabilityState == .ready, !isScanning else {
+                return
+            }
+
+            AppLog.debug("bluetooth", "Restarting Bluetooth sweep automatically for proximity mode")
+            refresh()
+        }
+    }
+
+    private func appendLiveSignalSample(for deviceID: UUID, signalStrength: Int, timestamp: Date) {
+        let sample = SignalTimelineSample(
+            timestamp: timestamp,
+            signalStrength: signalStrength,
+            sampleSource: "live"
+        )
+        liveSignalSamplesByDevice[deviceID, default: []].append(sample)
+        liveSignalSamplesByDevice[deviceID] = Array(liveSignalSamplesByDevice[deviceID, default: []].suffix(80))
+    }
+
     private var isDataStale: Bool {
         guard let lastScanDate else {
             return true
@@ -511,6 +604,7 @@ extension BluetoothScannerController: CBCentralManagerDelegate {
             seenAt: discoveryTime
         )
 
+        appendLiveSignalSample(for: device.id, signalStrength: device.signalStrength, timestamp: discoveryTime)
         integrate(device)
 
         if loggedDeviceIdentifiers.insert(device.id).inserted {
@@ -525,6 +619,40 @@ extension BluetoothScannerController: CBCentralManagerDelegate {
 enum BluetoothDeviceIdentity {
     nonisolated static let fallbackTypeGuess = "Type not obvious"
     nonisolated static let noManufacturerSummary = "None advertised"
+
+    nonisolated static func vendorName(from manufacturerData: Data?, displayName: String) -> String? {
+        if let companyIdentifier = companyIdentifier(from: manufacturerData), let companyName = companyName(for: companyIdentifier) {
+            return companyName
+        }
+
+        let lowercasedName = displayName.lowercased()
+
+        if lowercasedName.contains("airpods") || lowercasedName.contains("apple watch") || lowercasedName.contains("iphone") || lowercasedName.contains("ipad") {
+            return "Apple"
+        }
+
+        if lowercasedName.contains("logi") || lowercasedName.contains("logitech") {
+            return "Logitech"
+        }
+
+        if lowercasedName.contains("bose") {
+            return "Bose"
+        }
+
+        if lowercasedName.contains("sony") {
+            return "Sony"
+        }
+
+        if lowercasedName.contains("samsung") {
+            return "Samsung"
+        }
+
+        if lowercasedName.contains("garmin") {
+            return "Garmin"
+        }
+
+        return nil
+    }
 
     nonisolated static func inferType(
         from displayName: String,
@@ -633,26 +761,64 @@ enum BluetoothDeviceIdentity {
             return "Apple"
         case 0x0006:
             return "Microsoft"
+        case 0x000A:
+            return "Qualcomm"
         case 0x000F:
             return "Broadcom"
+        case 0x001D:
+            return "MikroTik"
+        case 0x003D:
+            return "Nike"
         case 0x0044:
             return "Sony"
+        case 0x004F:
+            return "Garmin"
+        case 0x0057:
+            return "Polar"
         case 0x0059:
             return "Nordic"
+        case 0x0060:
+            return "TomTom"
+        case 0x0065:
+            return "Jawbone"
         case 0x0075:
             return "Samsung"
+        case 0x007D:
+            return "Seiko Epson"
+        case 0x0087:
+            return "CSR"
+        case 0x008A:
+            return "Airoha"
+        case 0x00C4:
+            return "LG"
+        case 0x00D2:
+            return "Anker"
         case 0x00E0:
             return "Google"
+        case 0x00E5:
+            return "Xiaomi"
+        case 0x0104:
+            return "Roku"
         case 0x0131:
             return "Bose"
         case 0x0133:
             return "Tile"
         case 0x013D:
             return "Logitech"
+        case 0x0171:
+            return "JBL"
+        case 0x017C:
+            return "Sonos"
+        case 0x0188:
+            return "OnePlus"
         case 0x01A9:
             return "Garmin"
         case 0x01B5:
             return "Fitbit"
+        case 0x01D8:
+            return "Dyson"
+        case 0x0211:
+            return "Meta"
         default:
             return nil
         }

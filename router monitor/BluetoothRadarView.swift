@@ -6,15 +6,19 @@
 //
 
 import AppKit
+import Charts
 import SwiftUI
 
 struct BluetoothRadarView: View {
     @ObservedObject var scanner: BluetoothScannerController
+    @ObservedObject var telemetry: WirelessTelemetryStore
+    let selectedPlace: SavedPlace?
 
     @State private var searchText = ""
     @State private var showConnectableOnly = false
     @State private var showNamedOnly = false
     @State private var selectedDeviceID: BluetoothDevice.ID?
+    @State private var signalAlertThreshold = -75
     @State private var sortOrder = [KeyPathComparator(\BluetoothDevice.signalStrength, order: .reverse)]
 
     var body: some View {
@@ -25,9 +29,13 @@ struct BluetoothRadarView: View {
         .task {
             AppLog.info("ui", "Bluetooth radar tab appeared")
             scanner.prepare()
+            syncSelectedDevice(with: scanner.devices)
         }
         .onChange(of: scanner.devices) { _, devices in
             syncSelectedDevice(with: devices)
+        }
+        .onChange(of: selectedDeviceID) { _, _ in
+            syncAlertThreshold()
         }
     }
 
@@ -46,7 +54,8 @@ struct BluetoothRadarView: View {
                     device.typeGuess.localizedCaseInsensitiveContains(query) ||
                     device.identifierString.localizedCaseInsensitiveContains(query) ||
                     device.serviceSummary.localizedCaseInsensitiveContains(query) ||
-                    device.manufacturerSummary.localizedCaseInsensitiveContains(query)
+                    device.manufacturerSummary.localizedCaseInsensitiveContains(query) ||
+                    device.vendorDisplayName.localizedCaseInsensitiveContains(query)
             }
 
             let passesNamedFilter = !showNamedOnly || device.name != "Unnamed device"
@@ -63,18 +72,6 @@ struct BluetoothRadarView: View {
         visibleDevices.max(by: { $0.signalStrength < $1.signalStrength })
     }
 
-    private var identifiedDevicesCount: Int {
-        visibleDevices.filter { $0.typeGuess != BluetoothDeviceIdentity.fallbackTypeGuess }.count
-    }
-
-    private var connectableVisibleCount: Int {
-        visibleDevices.filter { $0.isConnectable == true }.count
-    }
-
-    private var hasActiveFilters: Bool {
-        !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || showConnectableOnly || showNamedOnly
-    }
-
     private var selectedDevice: BluetoothDevice? {
         if let selectedDeviceID, let matchedDevice = scanner.devices.first(where: { $0.id == selectedDeviceID }) {
             return matchedDevice
@@ -89,6 +86,32 @@ struct BluetoothRadarView: View {
         }
 
         return !visibleDevices.contains(where: { $0.id == selectedDevice.id })
+    }
+
+    private var selectedDeviceChange: WirelessItemChange? {
+        guard let selectedDevice else {
+            return nil
+        }
+
+        return telemetry.change(for: selectedDevice)
+    }
+
+    private var deviceTimeline: [SignalTimelineSample] {
+        guard let selectedDevice else {
+            return []
+        }
+
+        let historySamples = telemetry.bluetoothTimeline(for: selectedDevice)
+        let liveSamples = scanner.liveTimeline(for: selectedDevice.id)
+        return (historySamples + liveSamples).sorted(by: { $0.timestamp < $1.timestamp })
+    }
+
+    private var selectedPlaceDigest: WirelessDiffDigest {
+        telemetry.compareBluetooth(current: scanner.devices, to: selectedPlace)
+    }
+
+    private var hasActiveFilters: Bool {
+        !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || showConnectableOnly || showNamedOnly
     }
 
     @ViewBuilder
@@ -206,7 +229,7 @@ struct BluetoothRadarView: View {
                 Spacer()
 
                 if scanner.isScanning {
-                    Text("Live sweep in progress")
+                    Text(scanner.proximityTargetID == nil ? "Live sweep in progress" : "Proximity mode live")
                         .font(.footnote.weight(.semibold))
                         .foregroundStyle(.teal)
                 }
@@ -217,17 +240,17 @@ struct BluetoothRadarView: View {
 
             HStack(alignment: .top, spacing: 16) {
                 devicesTableCard
-                    .frame(minWidth: 660, maxWidth: .infinity, maxHeight: .infinity)
+                    .frame(minWidth: 700, maxWidth: .infinity, maxHeight: .infinity)
 
                 inspectorCard
-                    .frame(width: 320)
+                    .frame(width: 360)
             }
 
-            Text("Bluetooth sweeps list devices that are actively advertising nearby. Select a row to inspect it, click any header to sort, and Copy Visible exports the rows on screen.")
+            Text("Bluetooth sweeps are stored locally, diffed against the previous sweep, and can be watched for appearance, disappearance, and signal drop events. Proximity mode keeps re-sweeping so you can follow a chosen device in real time.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
-        .frame(minHeight: 280, maxHeight: .infinity, alignment: .topLeading)
+        .frame(minHeight: 320, maxHeight: .infinity, alignment: .topLeading)
     }
 
     @ViewBuilder
@@ -254,10 +277,21 @@ struct BluetoothRadarView: View {
             } else {
                 Table(of: BluetoothDevice.self, selection: $selectedDeviceID, sortOrder: $sortOrder) {
                     TableColumn("Device", value: \.name)
-                        .width(min: 180, ideal: 220)
+                        .width(min: 170, ideal: 210)
+
+                    TableColumn("Vendor", sortUsing: KeyPathComparator(\BluetoothDevice.vendorDisplayName)) { device in
+                        Text(device.vendorDisplayName)
+                            .foregroundStyle(device.vendorName == nil ? .secondary : .primary)
+                    }
+                    .width(min: 100, ideal: 120)
 
                     TableColumn("Type Guess", value: \.typeGuess)
-                        .width(min: 160, ideal: 210)
+                        .width(min: 150, ideal: 190)
+
+                    TableColumn("Change", sortUsing: KeyPathComparator(\BluetoothDevice.signalStrength, order: .reverse)) { device in
+                        changeBadgeRow(for: telemetry.change(for: device))
+                    }
+                    .width(min: 170, ideal: 190)
 
                     TableColumn("Connectable", sortUsing: KeyPathComparator(\BluetoothDevice.connectableLabel)) { device in
                         connectableBadge(for: device)
@@ -269,9 +303,6 @@ struct BluetoothRadarView: View {
                             .foregroundStyle(device.serviceCount == 0 ? .secondary : .primary)
                     }
                     .width(min: 170, ideal: 220)
-
-                    TableColumn("Manufacturer", value: \.manufacturerSummary)
-                        .width(min: 150, ideal: 190)
 
                     TableColumn("Signal", sortUsing: KeyPathComparator(\BluetoothDevice.signalStrength, order: .reverse)) { device in
                         signalStrengthView(for: device)
@@ -289,12 +320,6 @@ struct BluetoothRadarView: View {
                         }
                     }
                     .width(min: 110, ideal: 130)
-
-                    TableColumn("Identifier", value: \.identifierString) { device in
-                        Text(device.identifierString)
-                            .font(.system(.body, design: .monospaced))
-                    }
-                    .width(min: 210, ideal: 250)
                 } rows: {
                     ForEach(visibleDevices) { device in
                         TableRow(device)
@@ -348,22 +373,24 @@ struct BluetoothRadarView: View {
                 )
 
                 metricPill(
-                    title: "Connectable",
-                    value: "\(connectableVisibleCount)",
-                    symbol: "bolt.badge.clock"
-                )
-
-                metricPill(
                     title: "Strongest",
                     value: strongestVisibleDevice.map { "\($0.name) • \($0.signalDescription) (\($0.signalPercent)%)" } ?? "--",
                     symbol: "bolt.horizontal.circle"
                 )
 
                 metricPill(
-                    title: "Identified",
-                    value: "\(identifiedDevicesCount)",
-                    symbol: "sparkles"
+                    title: "Latest Diff",
+                    value: telemetry.latestBluetoothDiff.summaryLine,
+                    symbol: "arrow.left.arrow.right"
                 )
+
+                if selectedPlace != nil {
+                    metricPill(
+                        title: "Vs Place",
+                        value: selectedPlaceDigest.summaryLine,
+                        symbol: "mappin.and.ellipse"
+                    )
+                }
             }
             .padding(.vertical, 2)
         }
@@ -375,7 +402,7 @@ struct BluetoothRadarView: View {
                 Image(systemName: "magnifyingglass")
                     .foregroundStyle(.secondary)
 
-                TextField("Search name, type guess, identifier, service, or manufacturer", text: $searchText)
+                TextField("Search name, vendor, type guess, service, or manufacturer", text: $searchText)
                     .textFieldStyle(.plain)
             }
             .padding(.horizontal, 12)
@@ -429,13 +456,14 @@ struct BluetoothRadarView: View {
 
                     HStack(spacing: 8) {
                         connectableBadge(for: device)
-
                         detailTag(device.proximitySummary, tint: signalTint(for: device))
 
-                        if device.localName != nil {
-                            detailTag("Advertised name", tint: .blue)
+                        if let vendorName = device.vendorName {
+                            detailTag(vendorName, tint: .teal)
                         }
                     }
+
+                    changeBadgeRow(for: selectedDeviceChange)
                 }
 
                 VStack(alignment: .leading, spacing: 8) {
@@ -453,17 +481,13 @@ struct BluetoothRadarView: View {
                 .padding(14)
                 .background(Color.primary.opacity(0.045), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
 
-                VStack(alignment: .leading, spacing: 12) {
-                    detailRow(title: "Manufacturer", value: device.manufacturerSummary)
-                    detailRow(title: "Services", value: device.serviceSummary)
-                    detailRow(title: "Stability", value: device.stabilitySummary)
-                    detailRow(title: "Last seen", value: "\(device.lastSeenSummary) • \(device.seenCount)x observed")
+                proximityCard(for: device)
+                timelineCard(for: device)
+                watchCard(for: device)
+                detailsCard(for: device)
 
-                    if let localName = device.localName {
-                        detailRow(title: "Local name", value: localName)
-                    }
-
-                    detailRow(title: "Identifier", value: device.identifierString, monospaced: true)
+                if let selectedPlace {
+                    placeComparisonCard(for: device, selectedPlace: selectedPlace)
                 }
 
                 if selectedDeviceIsFilteredOut {
@@ -475,6 +499,178 @@ struct BluetoothRadarView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+    }
+
+    private func proximityCard(for device: BluetoothDevice) -> some View {
+        let isActive = scanner.proximityTargetID == device.id
+
+        return VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text("Proximity Mode")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+
+                Spacer()
+
+                if isActive {
+                    Text("Live")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.teal)
+                }
+            }
+
+            Text(isActive ? "The scanner is automatically re-sweeping to keep this device's RSSI moving in real time." : "Lock onto this device to keep sweeping automatically and follow whether you are getting warmer or colder.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            HStack(spacing: 10) {
+                Button(isActive ? "Stop Proximity Mode" : "Start Proximity Mode") {
+                    scanner.setProximityTarget(isActive ? nil : device.id)
+                }
+                .buttonStyle(.borderedProminent)
+
+                if isActive {
+                    Text("Trend: \(device.proximitySummary)")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(signalTint(for: device))
+                }
+            }
+        }
+        .padding(14)
+        .background(Color.primary.opacity(0.045), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+
+    private func timelineCard(for device: BluetoothDevice) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Timeline")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+
+            if deviceTimeline.count >= 2 {
+                Chart(deviceTimeline) { sample in
+                    LineMark(
+                        x: .value("Time", sample.timestamp),
+                        y: .value("Signal", sample.signalStrength)
+                    )
+                    .interpolationMethod(.catmullRom)
+                    .foregroundStyle(.teal)
+
+                    if sample.sampleSource == "live" {
+                        PointMark(
+                            x: .value("Time", sample.timestamp),
+                            y: .value("Signal", sample.signalStrength)
+                        )
+                        .foregroundStyle(.orange)
+                    }
+                }
+                .chartYScale(domain: -95 ... -30)
+                .frame(height: 150)
+
+                Text(scanner.proximityTargetID == device.id ? "Live points are highlighted while proximity mode is active." : "History includes stored sweeps plus any live RSSI samples gathered during the current session.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            } else {
+                ContentUnavailableView(
+                    "Timeline Needs More Sweeps",
+                    systemImage: "chart.xyaxis.line",
+                    description: Text("Run a few more Bluetooth sweeps to build a signal history for this device.")
+                )
+            }
+        }
+        .padding(14)
+        .background(Color.primary.opacity(0.045), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+
+    private func watchCard(for device: BluetoothDevice) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Watch Alert")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+
+                Spacer()
+
+                if telemetry.alert(for: device) != nil {
+                    Text("Watching")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.orange)
+                }
+            }
+
+            Text("Get a notification when this device advertises again, disappears, or drifts below a signal threshold.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Stepper(value: $signalAlertThreshold, in: -95 ... -45, step: 5) {
+                Text("Threshold \(signalAlertThreshold) dBm")
+                    .monospacedDigit()
+            }
+
+            HStack(spacing: 10) {
+                if telemetry.alert(for: device) == nil {
+                    Button("Watch This Device") {
+                        telemetry.addAlert(for: device, signalThreshold: signalAlertThreshold)
+                    }
+                    .buttonStyle(.borderedProminent)
+                } else {
+                    Button("Remove Watch") {
+                        telemetry.removeAlert(for: device)
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+
+                if let existingAlert = telemetry.alert(for: device) {
+                    Text("Current trigger: \(existingAlert.signalThreshold) dBm")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                }
+            }
+        }
+        .padding(14)
+        .background(Color.primary.opacity(0.045), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+
+    private func detailsCard(for device: BluetoothDevice) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            detailRow(title: "Vendor", value: device.vendorDisplayName)
+            detailRow(title: "Manufacturer", value: device.manufacturerSummary)
+            detailRow(title: "Services", value: device.serviceSummary)
+            detailRow(title: "Stability", value: device.stabilitySummary)
+            detailRow(title: "Last seen", value: "\(device.lastSeenSummary) • \(device.seenCount)x observed")
+            detailRow(title: "Identifier", value: device.identifierString, monospaced: true)
+        }
+    }
+
+    private func placeComparisonCard(for device: BluetoothDevice, selectedPlace: SavedPlace) -> some View {
+        let previousMatch = selectedPlace.bluetoothDevices.first(where: { $0.historyKey == device.historyKey })
+
+        return VStack(alignment: .leading, spacing: 10) {
+            Text("Compared With \(selectedPlace.name)")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+
+            if let previousMatch {
+                let delta = device.signalStrength - previousMatch.signalStrength
+                let deltaPrefix = delta > 0 ? "+" : ""
+                Text("This device was \(previousMatch.signalStrength) dBm there and is \(deltaPrefix)\(delta) dBm relative to that baseline now.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else {
+                Text("This device was not visible in the saved baseline.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Text(selectedPlaceDigest.summaryLine)
+                .font(.footnote.weight(.semibold))
+        }
+        .padding(14)
+        .background(Color.primary.opacity(0.045), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
     private func metricPill(title: String, value: String, symbol: String) -> some View {
@@ -489,7 +685,7 @@ struct BluetoothRadarView: View {
 
                 Text(value)
                     .font(.subheadline.weight(.semibold))
-                    .lineLimit(1)
+                    .lineLimit(2)
             }
         }
         .padding(.horizontal, 12)
@@ -529,6 +725,28 @@ struct BluetoothRadarView: View {
             .padding(.vertical, 5)
             .background(connectableTint(for: device).opacity(0.12), in: Capsule())
             .foregroundStyle(connectableTint(for: device))
+    }
+
+    private func changeBadgeRow(for change: WirelessItemChange?) -> some View {
+        HStack(spacing: 6) {
+            if let change {
+                ForEach(change.kinds, id: \.self) { kind in
+                    Text(kind.label)
+                        .font(.caption.weight(.semibold))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 5)
+                        .background(changeTint(for: kind).opacity(0.12), in: Capsule())
+                        .foregroundStyle(changeTint(for: kind))
+                }
+            } else {
+                Text("Stable")
+                    .font(.caption.weight(.semibold))
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 5)
+                    .background(Color.secondary.opacity(0.12), in: Capsule())
+                    .foregroundStyle(.secondary)
+            }
+        }
     }
 
     private func signalStrengthView(for device: BluetoothDevice) -> some View {
@@ -589,10 +807,11 @@ struct BluetoothRadarView: View {
 
     private func copyVisibleDevices() {
         let pasteboard = NSPasteboard.general
-        let header = "Name\tType Guess\tConnectable\tServices\tManufacturer\tSignal\tRSSI\tLast Seen\tIdentifier"
+        let header = "Name\tVendor\tType Guess\tConnectable\tServices\tManufacturer\tSignal\tRSSI\tLast Seen\tIdentifier"
         let rows = visibleDevices.map { device in
             [
                 device.name,
+                device.vendorDisplayName,
                 device.typeGuess,
                 device.connectableLabel,
                 device.serviceSummary,
@@ -615,6 +834,7 @@ struct BluetoothRadarView: View {
         let pasteboard = NSPasteboard.general
         let lines = [
             "Name: \(device.name)",
+            "Vendor: \(device.vendorDisplayName)",
             "Type Guess: \(device.typeGuess)",
             "Connectable: \(device.connectableLabel)",
             "Services: \(device.serviceSummary)",
@@ -642,6 +862,16 @@ struct BluetoothRadarView: View {
         }
 
         selectedDeviceID = strongestVisibleDevice?.id ?? devices.first?.id
+        syncAlertThreshold()
+    }
+
+    private func syncAlertThreshold() {
+        guard let selectedDevice else {
+            signalAlertThreshold = -75
+            return
+        }
+
+        signalAlertThreshold = telemetry.alert(for: selectedDevice)?.signalThreshold ?? -75
     }
 
     private func fieldNotes(for device: BluetoothDevice) -> String {
@@ -690,6 +920,21 @@ struct BluetoothRadarView: View {
             return .orange
         case nil:
             return .secondary
+        }
+    }
+
+    private func changeTint(for kind: WirelessChangeKind) -> Color {
+        switch kind {
+        case .new:
+            return .green
+        case .missing:
+            return .red
+        case .stronger:
+            return .teal
+        case .weaker:
+            return .orange
+        case .moved:
+            return .blue
         }
     }
 }

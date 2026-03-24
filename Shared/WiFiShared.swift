@@ -16,7 +16,7 @@ enum WiFiPermissionState: Equatable {
 }
 
 enum RouterIdentity {
-    nonisolated static func inferRouter(from ssid: String, bssid: String?) -> String {
+    nonisolated static func inferRouter(from ssid: String, bssid: String?, vendorName: String? = nil) -> String {
         let normalizedSSID = ssid.trimmingCharacters(in: .whitespacesAndNewlines)
         let lowercasedSSID = normalizedSSID.lowercased()
 
@@ -60,12 +60,85 @@ enum RouterIdentity {
             return "Phone hotspot"
         }
 
+        if let vendorName {
+            return "\(vendorName) access point"
+        }
+
         if bssid == nil {
             return "Grant location access to reveal the BSSID"
         }
 
         return "Model not advertised"
     }
+}
+
+enum WiFiVendorCatalog {
+    nonisolated static func vendorName(for bssid: String?) -> String? {
+        guard let bssid else {
+            return nil
+        }
+
+        let normalizedPrefix = bssid
+            .uppercased()
+            .replacingOccurrences(of: "-", with: ":")
+            .split(separator: ":")
+            .prefix(3)
+            .joined(separator: ":")
+
+        guard normalizedPrefix.count == 8 else {
+            return nil
+        }
+
+        return ouiVendors[normalizedPrefix]
+    }
+
+    nonisolated private static let ouiVendors: [String: String] = [
+        "04:18:D6": "Ubiquiti",
+        "18:E8:29": "Ubiquiti",
+        "24:5A:4C": "Ubiquiti",
+        "24:A4:3C": "Ubiquiti",
+        "68:D7:9A": "Ubiquiti",
+        "74:83:C2": "Ubiquiti",
+        "78:8A:20": "Ubiquiti",
+        "80:2A:A8": "Ubiquiti",
+        "9C:05:D6": "Ubiquiti",
+        "B4:FB:E4": "Ubiquiti",
+        "CC:2D:E0": "Ubiquiti",
+        "D8:B3:70": "Ubiquiti",
+        "DC:9F:DB": "Ubiquiti",
+        "E0:63:DA": "Ubiquiti",
+        "34:31:C4": "AVM",
+        "38:10:D5": "AVM",
+        "50:7E:5D": "AVM",
+        "54:E6:FC": "AVM",
+        "84:16:F9": "AVM",
+        "18:A6:F7": "TP-Link",
+        "50:C7:BF": "TP-Link",
+        "D8:0D:17": "TP-Link",
+        "F4:EC:38": "TP-Link",
+        "C0:56:27": "NETGEAR",
+        "9C:3D:CF": "NETGEAR",
+        "00:22:3F": "D-Link",
+        "B0:C5:54": "D-Link",
+        "00:25:9C": "Linksys",
+        "C0:56:E3": "Linksys",
+        "04:DB:56": "Apple",
+        "3C:15:C2": "Apple",
+        "40:A6:D9": "Apple",
+        "58:55:CA": "Apple",
+        "68:96:7B": "Apple",
+        "84:38:35": "Apple",
+        "90:72:40": "Apple",
+        "A4:5E:60": "Apple",
+        "CC:20:E8": "Apple",
+        "F0:18:98": "Apple",
+        "44:65:0D": "Cisco",
+        "70:3A:CB": "Cisco",
+        "6C:5A:B0": "Google",
+        "F4:F5:D8": "Google",
+        "2C:AB:00": "HUAWEI",
+        "9C:B7:0D": "HUAWEI",
+    ]
 }
 
 enum WiFiSignalPresentation {
@@ -165,6 +238,11 @@ struct BluetoothScanSnapshot: Codable, Sendable {
 enum RadarCacheKey: String {
     case wifi = "wifi-snapshot.json"
     case bluetooth = "bluetooth-snapshot.json"
+    case wifiHistory = "wifi-history.json"
+    case bluetoothHistory = "bluetooth-history.json"
+    case wifiAlerts = "wifi-alerts.json"
+    case bluetoothAlerts = "bluetooth-alerts.json"
+    case savedPlaces = "saved-places.json"
 }
 
 enum RadarCacheStore {

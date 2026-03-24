@@ -26,9 +26,9 @@ private enum RadarSurface: String, CaseIterable, Identifiable {
     var subtitle: String {
         switch self {
         case .wifi:
-            return "Nearby access points, channels, signal, and current join"
+            return "Nearby access points, vendors, alerts, and channel drift"
         case .bluetooth:
-            return "Nearby BLE devices, signal, services, and visibility hints"
+            return "Nearby BLE devices, proximity, alerts, and live trends"
         }
     }
 
@@ -52,12 +52,12 @@ private enum RadarSurface: String, CaseIterable, Identifiable {
 }
 
 struct ContentView: View {
+    @ObservedObject var model: WirelessDeckAppModel
     @StateObject private var debugLogStore = DebugLogStore.shared
-    @StateObject private var wifiScanner = WiFiScannerController()
-    @StateObject private var bluetoothScanner = BluetoothScannerController()
 
     @State private var selectedSurface: RadarSurface = .wifi
     @State private var isDebugConsoleVisible = false
+    @State private var selectedPlaceID: SavedPlace.ID?
 
     var body: some View {
         ZStack {
@@ -82,7 +82,7 @@ struct ContentView: View {
                 }
             }
             .padding(24)
-            .frame(minWidth: 1080, minHeight: 720, alignment: .topLeading)
+            .frame(minWidth: 1180, minHeight: 780, alignment: .topLeading)
         }
         .animation(.snappy(duration: 0.22), value: isDebugConsoleVisible)
         .animation(.snappy(duration: 0.26), value: selectedSurface)
@@ -92,6 +92,15 @@ struct ContentView: View {
         }
         .onChange(of: selectedSurface) { _, surface in
             prepare(surface)
+        }
+        .onChange(of: model.telemetry.savedPlaces) { _, places in
+            guard let selectedPlaceID else {
+                return
+            }
+
+            if !places.contains(where: { $0.id == selectedPlaceID }) {
+                self.selectedPlaceID = nil
+            }
         }
     }
 
@@ -169,6 +178,7 @@ struct ContentView: View {
             }
 
             surfaceSwitcher
+            headerInsightRow
         }
         .padding(18)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
@@ -239,22 +249,145 @@ struct ContentView: View {
         .frame(maxWidth: .infinity)
     }
 
+    private var headerInsightRow: some View {
+        HStack(alignment: .top, spacing: 12) {
+            healthInsightCard
+            savedPlacesCard
+            alertSummaryCard
+        }
+    }
+
+    private var healthInsightCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Label("Wireless Health", systemImage: "cross.case")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(selectedSurface.tint)
+
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Text("\(selectedHealthReport.score)")
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+
+                Text(selectedHealthReport.tone.title)
+                    .font(.headline)
+                    .foregroundStyle(selectedSurface.tint)
+            }
+
+            Text(selectedHealthReport.headline)
+                .font(.subheadline.weight(.semibold))
+
+            Text(selectedHealthReport.summary)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(14)
+        .background(selectedSurface.tint.opacity(0.08), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+    }
+
+    private var savedPlacesCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Label("Saved Places", systemImage: "mappin.and.ellipse")
+                    .font(.subheadline.weight(.semibold))
+
+                Spacer()
+
+                Button("Save Current") {
+                    saveCurrentPlace()
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.small)
+            }
+
+            Picker("Compare against", selection: $selectedPlaceID) {
+                Text("No baseline").tag(Optional<SavedPlace.ID>.none)
+
+                ForEach(model.telemetry.savedPlaces) { place in
+                    Text(place.name).tag(Optional(place.id))
+                }
+            }
+            .pickerStyle(.menu)
+
+            if let selectedPlace {
+                Text(compareDigest.summaryLine)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                HStack(spacing: 8) {
+                    Text(selectedPlace.createdAt.formatted(date: .abbreviated, time: .shortened))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    Spacer()
+
+                    Button("Delete") {
+                        model.telemetry.deletePlace(selectedPlace)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                }
+            } else {
+                Text("Store a named baseline like Home, Office, or Lab, then compare the live environment against it.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(14)
+        .background(Color.primary.opacity(0.05), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+    }
+
+    private var alertSummaryCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Label("Watched Signals", systemImage: "bell.badge")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.orange)
+
+            Text("\(model.totalAlertCount)")
+                .font(.system(size: 30, weight: .bold, design: .rounded))
+                .monospacedDigit()
+
+            Text(alertSummaryLine)
+                .font(.subheadline.weight(.semibold))
+
+            Text("Alerts fire when a watched SSID or Bluetooth device appears, disappears, or drops below your chosen threshold.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(width: 250, alignment: .leading)
+        .padding(14)
+        .background(Color.orange.opacity(0.08), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+    }
+
     @ViewBuilder
     private var selectedSurfaceView: some View {
         switch selectedSurface {
         case .wifi:
-            WiFiRadarView(scanner: wifiScanner)
+            WiFiRadarView(
+                scanner: model.wifiScanner,
+                telemetry: model.telemetry,
+                selectedPlace: selectedPlace
+            )
         case .bluetooth:
-            BluetoothRadarView(scanner: bluetoothScanner)
+            BluetoothRadarView(
+                scanner: model.bluetoothScanner,
+                telemetry: model.telemetry,
+                selectedPlace: selectedPlace
+            )
         }
     }
 
     private func surfaceCountText(for surface: RadarSurface) -> String {
         switch surface {
         case .wifi:
-            return "\(wifiScanner.networks.count) networks"
+            return "\(model.wifiScanner.networks.count) networks"
         case .bluetooth:
-            return "\(bluetoothScanner.devices.count) devices"
+            return "\(model.bluetoothScanner.devices.count) devices"
         }
     }
 
@@ -342,18 +475,18 @@ struct ContentView: View {
     private var selectedSurfaceStatusLine: String {
         switch selectedSurface {
         case .wifi:
-            return wifiScanner.statusLine
+            return model.wifiScanner.statusLine
         case .bluetooth:
-            return bluetoothScanner.statusLine
+            return model.bluetoothScanner.statusLine
         }
     }
 
     private func prepare(_ surface: RadarSurface) {
         switch surface {
         case .wifi:
-            wifiScanner.prepare()
+            model.wifiScanner.prepare()
         case .bluetooth:
-            bluetoothScanner.prepare()
+            model.bluetoothScanner.prepare()
         }
     }
 
@@ -376,13 +509,13 @@ struct ContentView: View {
     private var selectedSurfaceTimestampSummary: String {
         switch selectedSurface {
         case .wifi:
-            if let lastScanDate = wifiScanner.lastScanDate {
+            if let lastScanDate = model.wifiScanner.lastScanDate {
                 return "Last scan \(lastScanDate.formatted(date: .omitted, time: .standard))"
             }
 
             return "Ready when you are"
         case .bluetooth:
-            if let lastScanDate = bluetoothScanner.lastScanDate {
+            if let lastScanDate = model.bluetoothScanner.lastScanDate {
                 return "Last sweep \(lastScanDate.formatted(date: .omitted, time: .standard))"
             }
 
@@ -395,29 +528,66 @@ struct ContentView: View {
         switch selectedSurface {
         case .wifi:
             Button {
-                wifiScanner.refresh()
+                model.wifiScanner.refresh()
             } label: {
-                Label(wifiScanner.isScanning ? "Scanning..." : "Refresh Scan", systemImage: "arrow.clockwise")
+                Label(model.wifiScanner.isScanning ? "Scanning..." : "Refresh Scan", systemImage: "arrow.clockwise")
             }
             .buttonStyle(.borderedProminent)
-            .disabled(wifiScanner.isScanning)
+            .disabled(model.wifiScanner.isScanning)
         case .bluetooth:
-            if bluetoothScanner.isScanning {
+            if model.bluetoothScanner.isScanning {
                 Button {
-                    bluetoothScanner.stop()
+                    model.bluetoothScanner.stop()
                 } label: {
                     Label("Stop Sweep", systemImage: "stop.fill")
                 }
                 .buttonStyle(.borderedProminent)
             } else {
                 Button {
-                    bluetoothScanner.refresh()
+                    model.bluetoothScanner.refresh()
                 } label: {
                     Label("Start Sweep", systemImage: "dot.radiowaves.left.and.right")
                 }
                 .buttonStyle(.borderedProminent)
             }
         }
+    }
+
+    private var selectedHealthReport: WirelessHealthReport {
+        switch selectedSurface {
+        case .wifi:
+            return model.telemetry.wifiHealth
+        case .bluetooth:
+            return model.telemetry.bluetoothHealth
+        }
+    }
+
+    private var selectedPlace: SavedPlace? {
+        guard let selectedPlaceID else {
+            return nil
+        }
+
+        return model.telemetry.savedPlaces.first(where: { $0.id == selectedPlaceID })
+    }
+
+    private var compareDigest: WirelessDiffDigest {
+        switch selectedSurface {
+        case .wifi:
+            return model.telemetry.compareWiFi(current: model.wifiScanner.networks, to: selectedPlace)
+        case .bluetooth:
+            return model.telemetry.compareBluetooth(current: model.bluetoothScanner.devices, to: selectedPlace)
+        }
+    }
+
+    private var alertSummaryLine: String {
+        let wifiCount = model.telemetry.wifiAlerts.count
+        let bluetoothCount = model.telemetry.bluetoothAlerts.count
+
+        if model.totalAlertCount == 0 {
+            return "No active watches yet"
+        }
+
+        return "\(wifiCount) Wi-Fi • \(bluetoothCount) Bluetooth"
     }
 
     private func copyDebugLogs() {
@@ -443,8 +613,38 @@ struct ContentView: View {
             return .red
         }
     }
+
+    private func saveCurrentPlace() {
+        let suggestedName = "Place \(model.telemetry.savedPlaces.count + 1)"
+        guard let placeName = promptForPlaceName(defaultValue: suggestedName) else {
+            return
+        }
+
+        model.telemetry.savePlace(
+            named: placeName,
+            wifiNetworks: model.wifiScanner.networks,
+            bluetoothDevices: model.bluetoothScanner.devices
+        )
+        selectedPlaceID = model.telemetry.savedPlaces.first?.id
+    }
+
+    private func promptForPlaceName(defaultValue: String) -> String? {
+        let alert = NSAlert()
+        alert.messageText = "Save Current Environment"
+        alert.informativeText = "Give this baseline a short name so you can compare future scans against it."
+        alert.addButton(withTitle: "Save")
+        alert.addButton(withTitle: "Cancel")
+
+        let textField = NSTextField(frame: NSRect(x: 0, y: 0, width: 260, height: 24))
+        textField.stringValue = defaultValue
+        alert.accessoryView = textField
+
+        return alert.runModal() == .alertFirstButtonReturn
+            ? textField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            : nil
+    }
 }
 
 #Preview {
-    ContentView()
+    ContentView(model: WirelessDeckAppModel())
 }
